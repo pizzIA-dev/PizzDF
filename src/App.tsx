@@ -142,11 +142,11 @@ export function App() {
                 <Pizza className="w-4 h-4 text-amber-400" />
               </div>
               <div>
-                <span className="font-bold text-white text-sm tracking-wide">
+                <span className="font-bold text-slate-900 text-sm tracking-wide">
                   <span className="text-amber-400 font-black">P</span>izz<span className="text-amber-400 font-black">DF</span>
                 </span>
                 <span className="text-slate-500 mx-2">•</span>
-                <span className="text-slate-400">Suite de herramientas PDF 100% privadas y en tu navegador</span>
+                <span className="text-slate-600">Suite de herramientas PDF 100% privadas y en tu navegador</span>
               </div>
             </div>
 
