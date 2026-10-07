@@ -126,7 +126,7 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
         className={`relative border-2 faceted-cut p-10 sm:p-14 text-center cursor-pointer transition-all duration-300 ${
           isDragging
             ? 'border-amber-400 bg-amber-500/15 scale-[1.01] shadow-[0_0_30px_rgba(245,158,11,0.5)]'
-            : 'border-white/15 bg-[#090d16]/90 hover:bg-[#0c1220] hover:border-amber-400/60 hover:shadow-[0_0_20px_rgba(245,158,11,0.2)]'
+            : 'border-slate-300/90 bg-white hover:bg-amber-50/20 hover:border-amber-400 hover:shadow-md shadow-sm'
         }`}
       >
         <input

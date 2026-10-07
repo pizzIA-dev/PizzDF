@@ -45,7 +45,7 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
       <div 
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-lg bg-[#0a0e18] border-2 border-amber-500/40 rounded-2xl shadow-[0_0_50px_rgba(245,158,11,0.25)] overflow-hidden flex flex-col"
+        className="relative w-full max-w-lg bg-white border-2 border-amber-400 rounded-2xl shadow-2xl text-slate-800 overflow-hidden flex flex-col"
       >
         {/* Glow Header Accent */}
         <div className="h-1 w-full bg-gradient-to-r from-amber-500 via-orange-400 to-amber-500" />
@@ -57,13 +57,13 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
               <Heart className="w-5 h-5 text-amber-400 fill-amber-400/30 animate-pulse" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-white flex items-center gap-2">
+              <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
                 Apoyar a PizzDF
                 <span className="px-2 py-0.5 text-[9px] font-black uppercase tracking-wider bg-amber-400 text-slate-950 rounded">
                   100% Libre
                 </span>
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 Herramientas sin límites, sin registro y sin servidores espía.
               </p>
             </div>
@@ -71,14 +71,14 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.1] text-slate-400 hover:text-white transition"
+            className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-900 transition"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Value Proposition */}
-        <div className="px-6 py-3.5 bg-amber-400/[0.03] border-b border-white/[0.06] flex items-center gap-3 text-xs text-slate-300">
+        <div className="px-6 py-3.5 bg-amber-50/70 border-b border-amber-100 flex items-center gap-3 text-xs text-slate-700">
           <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>
             PizzDF procesa tus archivos directamente en la RAM de tu navegador. Tu apoyo voluntario ayuda a mantener el proyecto activo y añadir nuevas herramientas.
@@ -86,13 +86,13 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
         </div>
 
         {/* Navigation Tabs */}
-        <div className="px-6 pt-4 flex items-center gap-2 border-b border-white/[0.06] pb-3 text-xs font-bold">
+        <div className="px-6 pt-4 flex items-center gap-2 border-b border-slate-100 pb-3 text-xs font-bold">
           <button
             onClick={() => setActiveTab('global')}
             className={`px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 ${
               activeTab === 'global'
                 ? 'bg-amber-400 text-slate-950 font-black shadow-md shadow-amber-500/20'
-                : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
             }`}
           >
             <Coffee className="w-3.5 h-3.5" />
@@ -130,14 +130,14 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
                 href="https://www.buymeacoffee.com/lsanchezpizzia"
                 target="_blank"
                 rel="noreferrer"
-                className="group p-3.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-amber-400/50 flex items-center justify-between transition hover:shadow-lg hover:shadow-amber-500/5"
+                className="group p-3.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-amber-400 shadow-sm flex items-center justify-between transition hover:shadow-lg hover:shadow-amber-500/5"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg bg-[#FFDD00]/10 flex items-center justify-center text-lg">
                     ☕
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-white group-hover:text-amber-400 transition">
+                    <h4 className="text-xs font-bold text-slate-900 group-hover:text-amber-600 transition">
                       Buy Me a Coffee
                     </h4>
                     <p className="text-[11px] text-slate-400">Invita un café ($3 o $5 USD) con tarjeta de crédito/débito</p>
@@ -150,14 +150,14 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
                 href="https://ko-fi.com/lsanchezpizzia"
                 target="_blank"
                 rel="noreferrer"
-                className="group p-3.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-amber-400/50 flex items-center justify-between transition hover:shadow-lg hover:shadow-amber-500/5"
+                className="group p-3.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-amber-400 shadow-sm flex items-center justify-between transition hover:shadow-lg hover:shadow-amber-500/5"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg bg-[#13C3FF]/10 flex items-center justify-center text-lg">
                     💙
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-white group-hover:text-amber-400 transition">
+                    <h4 className="text-xs font-bold text-slate-900 group-hover:text-amber-600 transition">
                       Ko-fi
                     </h4>
                     <p className="text-[11px] text-slate-400">Donación voluntaria directa vía PayPal o Stripe</p>
@@ -170,14 +170,14 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
                 href="https://paypal.me/lsanchezpizzia"
                 target="_blank"
                 rel="noreferrer"
-                className="group p-3.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-amber-400/50 flex items-center justify-between transition hover:shadow-lg hover:shadow-amber-500/5"
+                className="group p-3.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-amber-400 shadow-sm flex items-center justify-between transition hover:shadow-lg hover:shadow-amber-500/5"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg bg-[#00457C]/20 flex items-center justify-center text-lg">
                     🅿️
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-white group-hover:text-amber-400 transition">
+                    <h4 className="text-xs font-bold text-slate-900 group-hover:text-amber-600 transition">
                       PayPal
                     </h4>
                     <p className="text-[11px] text-slate-400">Transferencia segura desde cualquier país del mundo</p>
@@ -189,9 +189,9 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
           )}
 
           {activeTab === 'local' && (
-            <div className="space-y-4 bg-slate-900/80 border border-slate-800 rounded-2xl p-5 text-center">
+            <div className="space-y-4 bg-slate-50 border border-slate-200 rounded-2xl p-5 text-center shadow-sm">
               <div>
-                <h4 className="text-sm font-black text-white flex items-center justify-center gap-2">
+                <h4 className="text-sm font-black text-slate-900 flex items-center justify-center gap-2">
                   <span className="text-purple-400">Yape</span>
                   <span className="text-xs font-bold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/20">
                     Perú
@@ -212,7 +212,7 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
               </div>
 
               <div className="pt-1">
-                <span className="text-xs text-slate-300 font-semibold block">
+                <span className="text-xs text-slate-700 font-semibold block">
                   Titular: <span className="text-amber-400 font-bold">Luis Angel Sanchez Aguilar</span>
                 </span>
               </div>
@@ -226,7 +226,7 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
                   ₮
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-white">USDT (Red TRC20 / TRON)</h4>
+                  <h4 className="text-xs font-bold text-slate-900">USDT (Red TRC20 / TRON)</h4>
                   <p className="text-[10px] text-slate-400">Billetera oficial para donaciones en USDT (Red TRON)</p>
                 </div>
               </div>
@@ -257,11 +257,11 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
         </div>
 
         {/* Footer with Free Alternative Support */}
-        <div className="p-4 bg-black/40 border-t border-white/[0.06] flex items-center justify-between text-xs">
+        <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs">
           <span className="text-[11px] text-slate-400">¿No puedes donar? También ayudas compartiendo:</span>
           <button
             onClick={handleShare}
-            className="px-3 py-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-slate-300 hover:text-white font-semibold transition flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-950 border border-slate-200 font-semibold transition flex items-center gap-1.5"
           >
             {copiedKey === 'share' ? (
               <>

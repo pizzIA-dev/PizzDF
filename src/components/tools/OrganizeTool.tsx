@@ -187,8 +187,14 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
   // Marquee (drag box) selection handlers
   const handleGridMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Only initiate marquee if clicking directly on the grid container or background (not inside interactive buttons/handles)
-    if ((e.target as HTMLElement).closest('button') || (e.target as HTMLElement).closest('.cursor-grab')) {
+    // Only block marquee if clicking directly inside action buttons
+    if ((e.target as HTMLElement).closest('button')) {
+      return;
+    }
+
+    // If clicking directly on a card without Shift or Ctrl, let card drag/click handle it
+    const cardEl = (e.target as HTMLElement).closest('[data-page-id]');
+    if (cardEl && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
       return;
     }
 
@@ -252,6 +258,16 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     });
   };
 
+  const handleSelectEven = () => {
+    const evens = new Set(pages.filter((_, i) => (i + 1) % 2 === 0).map(p => p.id));
+    setSelectedIds(evens);
+  };
+
+  const handleSelectOdd = () => {
+    const odds = new Set(pages.filter((_, i) => (i + 1) % 2 !== 0).map(p => p.id));
+    setSelectedIds(odds);
+  };
+
   const handleSelectAll = () => {
     if (selectedIds.size === pages.length) {
       setSelectedIds(new Set());
@@ -296,7 +312,36 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       setDragOverIndex(null);
       return;
     }
-    handleMove(draggedIndex, targetIndex);
+
+    const draggedPage = pages[draggedIndex];
+    if (!draggedPage) {
+      setDraggedIndex(null);
+      setDragOverIndex(null);
+      return;
+    }
+
+    // If dragged card is part of multi-selection, move all selected items together
+    if (selectedIds.has(draggedPage.id) && selectedIds.size > 1) {
+      setPages(prev => {
+        const selectedItems = prev.filter(p => selectedIds.has(p.id));
+        const remainingItems = prev.filter(p => !selectedIds.has(p.id));
+        const targetPage = prev[targetIndex];
+
+        let insertPos = remainingItems.findIndex(p => p.id === targetPage?.id);
+        if (insertPos === -1) {
+          insertPos = remainingItems.length;
+        } else if (targetIndex > draggedIndex) {
+          insertPos += 1;
+        }
+
+        remainingItems.splice(insertPos, 0, ...selectedItems);
+        return remainingItems;
+      });
+      addToast('info', `${selectedIds.size} páginas reordenadas`);
+    } else {
+      handleMove(draggedIndex, targetIndex);
+    }
+
     setDraggedIndex(null);
     setDragOverIndex(null);
   };
@@ -396,7 +441,7 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       ) : (
         <div className="space-y-6">
           {/* Action Toolbar */}
-          <div className="glass-panel rounded-2xl p-3.5 flex flex-wrap items-center justify-between gap-3 sticky top-20 z-30 shadow-xl">
+          <div className="bg-white/95 border border-slate-200 rounded-2xl p-3.5 flex flex-wrap items-center justify-between gap-3 sticky top-20 z-30 shadow-md backdrop-blur-md">
             <div className="flex items-center gap-2 text-xs text-slate-400">
               <span className="font-semibold text-white">{file.name}</span>
               <span>•</span>
@@ -408,7 +453,7 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             <div className="flex flex-wrap items-center gap-2">
               <button
                 onClick={() => handleRotateAll(-90)}
-                className="px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition border border-white/[0.06]"
+                className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5 transition border border-slate-200"
               >
                 <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
                 Rotar Todo -90°
@@ -416,7 +461,7 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
               <button
                 onClick={() => handleRotateAll(90)}
-                className="px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition border border-white/[0.06]"
+                className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5 transition border border-slate-200"
               >
                 <RotateCw className="w-3.5 h-3.5 text-amber-400" />
                 Rotar Todo +90°
@@ -424,7 +469,7 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
               <button
                 onClick={handleReverseOrder}
-                className="px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition border border-white/[0.06]"
+                className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5 transition border border-slate-200"
               >
                 <ArrowUpDown className="w-3.5 h-3.5 text-amber-400" />
                 Invertir Orden
@@ -442,7 +487,7 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
               <button
                 onClick={handleSelectAll}
-                className="px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition border border-white/[0.06]"
+                className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5 transition border border-slate-200"
               >
                 {selectedIds.size === pages.length ? (
                   <>
@@ -459,12 +504,26 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             </div>
           </div>
 
-          {/* Pages Grid */}
+          {/* Pages Grid Workspace with outer margin for marquee drag */}
           <div
             ref={gridContainerRef}
             onMouseDown={handleGridMouseDown}
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 relative select-none min-h-[300px] p-2 rounded-2xl bg-black/20 border border-white/5"
+            className="relative select-none p-6 sm:p-8 rounded-2xl bg-slate-100/80 border border-slate-200 min-h-[450px]"
           >
+            {/* Rubberband Selection Marquee Rectangle */}
+            {isMarqueeSelecting && marqueeStart && marqueeCurrent && (
+              <div
+                className="fixed pointer-events-none z-50 bg-amber-500/20 border-2 border-amber-500 rounded-lg shadow-xl"
+                style={{
+                  left: `${Math.min(marqueeStart.x, marqueeCurrent.x)}px`,
+                  top: `${Math.min(marqueeStart.y, marqueeCurrent.y)}px`,
+                  width: `${Math.abs(marqueeCurrent.x - marqueeStart.x)}px`,
+                  height: `${Math.abs(marqueeCurrent.y - marqueeStart.y)}px`,
+                }}
+              />
+            )}
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             {/* Rubberband Selection Marquee Rectangle */}
             {isMarqueeSelecting && marqueeStart && marqueeCurrent && (
               <div
@@ -503,14 +562,14 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   onDragOver={(e) => handleDragOver(index, e)}
                   onDragEnd={handleDragEnd}
                   onDrop={(e) => handleDropOnPage(index, e)}
-                  className={`group relative glass-panel rounded-2xl overflow-hidden flex flex-col justify-between transition-all duration-300 ease-out cursor-grab active:cursor-grabbing select-none ${shiftClass} ${
+                  className={`group relative bg-white border rounded-2xl overflow-hidden flex flex-col justify-between transition-all duration-300 ease-out cursor-grab active:cursor-grabbing select-none shadow-sm hover:shadow-md ${shiftClass} ${
                     isBeingDragged
                       ? 'opacity-30 scale-95 border-amber-400 border-dashed ring-2 ring-amber-400/30'
                       : isDragOver
                       ? 'border-amber-400 ring-2 ring-amber-400/60 scale-[1.03] shadow-[0_0_25px_rgba(251,191,36,0.35)] z-20'
                       : isSelected
                       ? 'border-amber-400 ring-2 ring-amber-400/30 shadow-lg shadow-amber-500/10'
-                      : 'hover:border-white/20'
+                      : 'border-slate-200 hover:border-amber-400'
                   }`}
                 >
                   {/* Glowing landing slot indicator when hovering over this position */}
@@ -523,7 +582,7 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     </div>
                   )}
                   {/* Card Header */}
-                  <div className="p-2.5 bg-black/40 border-b border-white/[0.06] flex items-center justify-between">
+                  <div className="p-2.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
                       <button
                         type="button"
@@ -539,7 +598,7 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                           <Square className="w-3.5 h-3.5" />
                         )}
                       </button>
-                      <span className="text-[11px] font-bold text-slate-200">
+                      <span className="text-[11px] font-bold text-slate-800">
                         Pág. {index + 1}
                       </span>
                     </div>
@@ -548,7 +607,7 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   </div>
 
                   {/* Thumbnail container */}
-                  <div className="relative p-3 flex items-center justify-center bg-black/20 min-h-[170px] overflow-hidden">
+                  <div className="relative p-3 flex items-center justify-center bg-slate-100/60 min-h-[170px] overflow-hidden">
                     <div
                       className="transition-transform duration-300 flex items-center justify-center"
                       style={{ transform: `rotate(${page.rotation}deg)` }}
@@ -568,12 +627,12 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   </div>
 
                   {/* Card Actions */}
-                  <div className="p-2 bg-black/50 border-t border-white/[0.06] flex items-center justify-around gap-1">
+                  <div className="p-2 bg-slate-50 border-t border-slate-100 flex items-center justify-around gap-1">
                     <button
                       type="button"
                       onClick={(e) => { e.stopPropagation(); handleRotate(index, -90); }}
                       title="Rotar a la izquierda"
-                      className="p-1.5 rounded-lg hover:bg-white/[0.08] text-slate-400 hover:text-amber-400 transition"
+                      className="p-1.5 rounded-lg hover:bg-slate-200/80 text-slate-600 hover:text-amber-600 transition"
                     >
                       <RotateCcw className="w-3.5 h-3.5" />
                     </button>
@@ -582,7 +641,7 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       type="button"
                       onClick={(e) => { e.stopPropagation(); handleRotate(index, 90); }}
                       title="Rotar a la derecha"
-                      className="p-1.5 rounded-lg hover:bg-white/[0.08] text-slate-400 hover:text-amber-400 transition"
+                      className="p-1.5 rounded-lg hover:bg-slate-200/80 text-slate-600 hover:text-amber-600 transition"
                     >
                       <RotateCw className="w-3.5 h-3.5" />
                     </button>
@@ -591,7 +650,7 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       type="button"
                       onClick={(e) => { e.stopPropagation(); handleDuplicate(index); }}
                       title="Duplicar página"
-                      className="p-1.5 rounded-lg hover:bg-white/[0.08] text-slate-400 hover:text-blue-400 transition"
+                      className="p-1.5 rounded-lg hover:bg-slate-200/80 text-slate-600 hover:text-blue-600 transition"
                     >
                       <Copy className="w-3.5 h-3.5" />
                     </button>
@@ -608,6 +667,7 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 </div>
               );
             })}
+            </div>
           </div>
         </div>
       )}
