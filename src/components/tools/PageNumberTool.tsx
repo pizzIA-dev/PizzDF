@@ -70,17 +70,17 @@ export const PageNumberTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div className="flex items-center gap-3">
-          <button onClick={onBack} className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition">
+          <button onClick={onBack} className="p-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-slate-950 hover:bg-slate-50 shadow-sm transition">
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div>
-            <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
               <Hash className="w-6 h-6 text-violet-400" />
               Numerar Páginas
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-600">
               Añade folios o números de página automáticamente a cada hoja de tu documento.
             </p>
           </div>
@@ -93,7 +93,7 @@ export const PageNumberTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
                 setFile(null);
                 setFileBuffer(null);
               }}
-              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition flex items-center gap-1.5"
+              className="px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 hover:text-slate-950 shadow-sm transition flex items-center gap-1.5"
             >
               <RefreshCw className="w-3.5 h-3.5" />
               Cambiar Archivo
@@ -130,15 +130,15 @@ export const PageNumberTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-5">
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
+          <div className="bg-white border border-slate-200 rounded-3xl p-6 space-y-5 shadow-sm">
+            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
               <LayoutTemplate className="w-4 h-4 text-violet-400" />
               Configuración de Numeración
             </h3>
 
             {/* Position Picker */}
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-slate-300">Posición en la hoja:</label>
+              <label className="text-xs font-semibold text-slate-800">Posición en la hoja:</label>
               <div className="grid grid-cols-2 gap-2">
                 {[
                   { id: 'bottom-center' as const, label: 'Abajo al centro' },
@@ -152,7 +152,7 @@ export const PageNumberTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
                     className={`px-3 py-2 rounded-xl text-xs font-semibold transition text-left ${
                       position === p.id
                         ? 'bg-violet-500 text-white shadow'
-                        : 'bg-slate-950 border border-slate-800 text-slate-300 hover:border-slate-700'
+                        : 'bg-white border border-slate-200 text-slate-700 hover:border-amber-400'
                     }`}
                   >
                     {p.label}
@@ -163,7 +163,7 @@ export const PageNumberTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
 
             {/* Format Picker */}
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-slate-300">Formato del texto:</label>
+              <label className="text-xs font-semibold text-slate-800">Formato del texto:</label>
               <div className="space-y-2">
                 {[
                   { id: 'pageOfTotal' as const, label: 'Página X de Y (ej. Página 1 de 12)' },
@@ -176,7 +176,7 @@ export const PageNumberTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
                     className={`w-full px-4 py-2.5 rounded-xl text-xs font-semibold transition text-left flex items-center justify-between ${
                       format === f.id
                         ? 'bg-violet-500/20 border border-violet-500 text-violet-300'
-                        : 'bg-slate-950 border border-slate-800 text-slate-400 hover:text-slate-200'
+                        : 'bg-white border border-slate-200 text-slate-700 hover:border-violet-400 hover:bg-violet-50/20 shadow-sm'
                     }`}
                   >
                     <span>{f.label}</span>
@@ -187,7 +187,7 @@ export const PageNumberTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
 
             {/* Font size */}
             <div className="space-y-1.5">
-              <div className="flex justify-between text-xs font-semibold text-slate-300">
+              <div className="flex justify-between text-xs font-semibold text-slate-800">
                 <span>Tamaño de fuente:</span>
                 <span className="font-mono text-violet-400">{fontSize} pt</span>
               </div>
@@ -204,14 +204,14 @@ export const PageNumberTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
           </div>
 
           {/* Preview Box */}
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col items-center">
-            <span className="text-xs font-semibold text-slate-400 mb-4">Vista previa de la hoja</span>
+          <div className="bg-white border border-slate-200 rounded-3xl p-6 flex flex-col items-center shadow-sm">
+            <span className="text-xs font-semibold text-slate-600 mb-4">Vista previa de la hoja</span>
             <div className="relative w-[280px] h-[380px] bg-white rounded-xl shadow-2xl p-6 flex flex-col justify-between overflow-hidden border border-slate-300">
               <div className="space-y-3 opacity-20 pointer-events-none w-full">
-                <div className="h-4 bg-slate-900 rounded w-1/2" />
-                <div className="h-2 bg-slate-400 rounded w-full" />
-                <div className="h-2 bg-slate-400 rounded w-full" />
-                <div className="h-2 bg-slate-400 rounded w-4/5" />
+                <div className="h-4 bg-slate-200 rounded w-1/2" />
+                <div className="h-2 bg-slate-200 rounded w-full" />
+                <div className="h-2 bg-slate-200 rounded w-full" />
+                <div className="h-2 bg-slate-200 rounded w-4/5" />
               </div>
 
               {/* Position indicator */}

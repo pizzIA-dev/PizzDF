@@ -302,17 +302,17 @@ export const SplitTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div className="flex items-center gap-3">
-          <button onClick={onBack} className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition">
+          <button onClick={onBack} className="p-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-slate-950 hover:bg-slate-50 shadow-sm transition">
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div>
-            <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
               <Scissors className="w-6 h-6 text-purple-400" />
               Dividir y Separar PDF
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-600">
               Extrae páginas seleccionadas a un nuevo documento o separa cada página en archivos individuales.
             </p>
           </div>
@@ -326,7 +326,7 @@ export const SplitTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 setFileBuffer(null);
                 setThumbnails([]);
               }}
-              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition flex items-center gap-1.5"
+              className="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 hover:text-slate-950 hover:bg-slate-50 shadow-sm transition flex items-center gap-1.5"
             >
               <RefreshCw className="w-3.5 h-3.5" />
               Cambiar Archivo
@@ -374,15 +374,15 @@ export const SplitTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       ) : (
         <div className="space-y-6">
           {/* Options Card */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+          <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4 shadow-sm">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="text-xs font-bold text-slate-300">Modo de división:</span>
+              <span className="text-xs font-bold text-slate-900">Modo de división:</span>
               <button
                 onClick={() => setSplitMode('extract')}
                 className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
                   splitMode === 'extract'
                     ? 'bg-purple-500 text-white shadow'
-                    : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
                 }`}
               >
                 Extraer páginas seleccionadas
@@ -392,7 +392,7 @@ export const SplitTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
                   splitMode === 'all-individual'
                     ? 'bg-purple-500 text-white shadow'
-                    : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
                 }`}
               >
                 Separar cada página en un PDF (.ZIP)
@@ -400,34 +400,34 @@ export const SplitTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             </div>
 
             {splitMode === 'extract' && (
-              <div className="pt-2 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-t border-slate-800">
+              <div className="pt-2 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-t border-slate-200">
                 <div className="flex items-center gap-2 w-full md:w-auto">
-                  <span className="text-xs text-slate-400 whitespace-nowrap">Rango de páginas:</span>
+                  <span className="text-xs text-slate-700 font-semibold whitespace-nowrap">Rango de páginas:</span>
                   <input
                     type="text"
                     value={rangeInput}
                     onChange={(e) => handleRangeInputChange(e.target.value)}
                     placeholder="Ej. 1-3, 5, 8"
-                    className="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white placeholder-slate-500 w-48 focus:border-purple-500 focus:outline-none"
+                    className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 placeholder-slate-400 w-48 focus:border-purple-500 focus:outline-none shadow-sm"
                   />
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
                   <button
                     onClick={handleSelectAll}
-                    className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition"
+                    className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs transition font-semibold"
                   >
                     Todas ({thumbnails.length})
                   </button>
                   <button
                     onClick={handleSelectOdd}
-                    className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition"
+                    className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs transition font-semibold"
                   >
                     Páginas Impares
                   </button>
                   <button
                     onClick={handleSelectEven}
-                    className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition"
+                    className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs transition font-semibold"
                   >
                     Páginas Pares
                   </button>
@@ -436,7 +436,7 @@ export const SplitTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       setSelectedPages([]);
                       setRangeInput('');
                     }}
-                    className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 text-xs transition"
+                    className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 border border-slate-200 text-xs transition"
                   >
                     Limpiar
                   </button>
@@ -449,7 +449,7 @@ export const SplitTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           <div
             ref={gridContainerRef}
             onMouseDown={handleGridMouseDown}
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 relative select-none p-3 rounded-2xl bg-black/20 border border-white/5 min-h-[300px]"
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 relative select-none p-3 rounded-2xl bg-slate-100/80 border border-slate-200 min-h-[300px]"
           >
             {/* Rubberband Selection Marquee Rectangle */}
             {isMarqueeSelecting && marqueeStart && marqueeCurrent && (
@@ -476,11 +476,11 @@ export const SplitTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   className={`border rounded-2xl overflow-hidden p-3 transition-all cursor-pointer select-none ${
                     isSelected
                       ? 'bg-amber-400/10 border-amber-400 ring-2 ring-amber-400/40 shadow-lg shadow-amber-500/15'
-                      : 'bg-slate-900 border-slate-800 hover:border-slate-700'
+                      : 'bg-white border-slate-200 hover:border-amber-400 shadow-sm'
                   }`}
                 >
                   <div className="flex items-center justify-between pb-2">
-                    <span className={`text-xs font-bold ${isSelected ? 'text-amber-300' : 'text-slate-300'}`}>
+                    <span className={`text-xs font-bold ${isSelected ? 'text-amber-600' : 'text-slate-800'}`}>
                       Pág. {pageNum}
                     </span>
                     {isSelected ? (
@@ -490,7 +490,7 @@ export const SplitTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     )}
                   </div>
 
-                  <div className="bg-slate-950/60 rounded-lg p-2 flex items-center justify-center min-h-[140px] pointer-events-none">
+                  <div className="bg-slate-100/60 rounded-lg p-2 flex items-center justify-center min-h-[140px] pointer-events-none">
                     <img
                       src={thumbUrl}
                       alt={`Página ${pageNum}`}

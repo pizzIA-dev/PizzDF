@@ -139,13 +139,13 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
         />
 
         <div className="flex flex-col items-center justify-center space-y-4">
-          <div className="w-16 h-16 bg-[#0e1424] border border-amber-500/30 faceted-cut flex items-center justify-center shadow-md">
-            <UploadCloud className="w-8 h-8 text-amber-400" />
+          <div className="w-16 h-16 bg-amber-50 border border-amber-300 faceted-cut flex items-center justify-center shadow-md">
+            <UploadCloud className="w-8 h-8 text-amber-500" />
           </div>
 
           <div className="space-y-1">
-            <h3 className="text-xl sm:text-2xl font-black text-white">{title}</h3>
-            <p className="text-xs sm:text-sm text-slate-400 font-medium">{subtitle}</p>
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900">{title}</h3>
+            <p className="text-xs sm:text-sm text-slate-600 font-medium">{subtitle}</p>
           </div>
 
           <div className="pt-2">
@@ -164,7 +164,7 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
           <button
             type="button"
             onClick={createSamplePdf}
-            className="btn-secondary-sharp px-4 py-2 text-xs flex items-center gap-2 text-amber-300 hover:text-white"
+            className="btn-secondary-sharp px-4 py-2 text-xs flex items-center gap-2 text-amber-700 hover:text-slate-950 hover:bg-slate-100"
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span>¿No tienes un PDF a mano? Cargar documento de prueba</span>

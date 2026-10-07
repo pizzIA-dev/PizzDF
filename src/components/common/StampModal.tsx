@@ -71,23 +71,23 @@ export const StampModal: React.FC<StampModalProps> = ({ isOpen, onClose, onSelec
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-      <div className="bg-[#0b0f1a] border border-white/20 rounded-3xl w-full max-w-lg p-6 space-y-5 shadow-2xl">
-        <div className="flex items-center justify-between border-b border-white/10 pb-3">
-          <div className="flex items-center gap-2.5 text-white font-extrabold text-base">
+      <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-lg p-6 space-y-5 shadow-2xl text-slate-800">
+        <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div className="flex items-center gap-2.5 text-slate-900 font-extrabold text-base">
             <StampIcon className="w-5 h-5 text-amber-400" />
             <span>Seleccionar o Crear Sello</span>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg">
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-700 p-1 rounded-lg">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Tab switchers */}
-        <div className="grid grid-cols-3 gap-1 bg-black/40 p-1 rounded-xl border border-white/10 text-xs font-bold">
+        <div className="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold">
           <button
             onClick={() => setTab('preset')}
             className={`py-2 rounded-lg flex items-center justify-center gap-1.5 transition ${
-              tab === 'preset' ? 'bg-amber-400 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
+              tab === 'preset' ? 'bg-amber-400 text-slate-950 font-black' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <span>Rápidos</span>
@@ -95,7 +95,7 @@ export const StampModal: React.FC<StampModalProps> = ({ isOpen, onClose, onSelec
           <button
             onClick={() => setTab('custom')}
             className={`py-2 rounded-lg flex items-center justify-center gap-1.5 transition ${
-              tab === 'custom' ? 'bg-amber-400 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
+              tab === 'custom' ? 'bg-amber-400 text-slate-950 font-black' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <Sparkles className="w-3.5 h-3.5" />
@@ -104,7 +104,7 @@ export const StampModal: React.FC<StampModalProps> = ({ isOpen, onClose, onSelec
           <button
             onClick={() => setTab('image')}
             className={`py-2 rounded-lg flex items-center justify-center gap-1.5 transition ${
-              tab === 'image' ? 'bg-amber-400 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
+              tab === 'image' ? 'bg-amber-400 text-slate-950 font-black' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <ImageIcon className="w-3.5 h-3.5" />
@@ -115,7 +115,7 @@ export const StampModal: React.FC<StampModalProps> = ({ isOpen, onClose, onSelec
         {/* Presets Grid */}
         {tab === 'preset' && (
           <div className="space-y-3">
-            <span className="text-xs font-bold uppercase text-slate-400 tracking-wider">
+            <span className="text-xs font-bold uppercase text-slate-600 tracking-wider">
               Sellos Rápidos Oficiales:
             </span>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
@@ -144,17 +144,17 @@ export const StampModal: React.FC<StampModalProps> = ({ isOpen, onClose, onSelec
         {tab === 'custom' && (
           <div className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300">Texto del sello:</label>
+              <label className="text-xs font-semibold text-slate-800">Texto del sello:</label>
               <input
                 type="text"
                 value={customText}
                 onChange={e => setCustomText(e.target.value)}
                 placeholder="Ej. REVISADO POR LUIS, FECHA..."
-                className="w-full px-3.5 py-2.5 bg-black border border-white/20 rounded-xl text-xs font-bold text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 uppercase"
+                className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-400 uppercase"
               />
             </div>
 
-            <div className="flex items-center justify-between text-xs text-slate-300">
+            <div className="flex items-center justify-between text-xs text-slate-700 font-medium">
               <span>Color del sello:</span>
               <div className="flex items-center gap-2">
                 {['#dc2626', '#16a34a', '#2563eb', '#d97706', '#9333ea'].map(c => (
@@ -193,7 +193,7 @@ export const StampModal: React.FC<StampModalProps> = ({ isOpen, onClose, onSelec
               </div>
             )}
 
-            <div className="flex justify-end gap-2 pt-2 border-t border-white/10">
+            <div className="flex justify-end gap-2 pt-2 border-t border-slate-200">
               <button
                 onClick={handleCustomApply}
                 disabled={!customText.trim()}
@@ -208,7 +208,7 @@ export const StampModal: React.FC<StampModalProps> = ({ isOpen, onClose, onSelec
         {/* Upload Image Stamp */}
         {tab === 'image' && (
           <div className="space-y-4">
-            <label className="border-2 border-dashed border-white/20 hover:border-amber-400 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer transition bg-slate-950/50">
+            <label className="border-2 border-dashed border-slate-300 hover:border-amber-400 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer transition bg-slate-50 hover:bg-amber-50/20">
               <input
                 type="file"
                 accept="image/png,image/jpeg,image/webp"
@@ -216,7 +216,7 @@ export const StampModal: React.FC<StampModalProps> = ({ isOpen, onClose, onSelec
                 className="hidden"
               />
               <UploadCloud className="w-8 h-8 text-amber-400 mb-2" />
-              <span className="text-xs font-bold text-white">Subir imagen o logo de sello notarial / corporativo</span>
+              <span className="text-xs font-bold text-slate-800">Subir imagen o logo de sello notarial / corporativo</span>
               <span className="text-[11px] text-slate-500 mt-0.5">Soporta sellos redondos o firmas en PNG transparente</span>
             </label>
 

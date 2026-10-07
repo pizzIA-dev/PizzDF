@@ -618,21 +618,21 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
               {/* Floating Inspector Toolbar when selected */}
               {isSelected && (
                 <div
-                  className="absolute -top-14 left-0 z-50 bg-[#0b0f1a] border border-white/25 rounded-xl p-1.5 flex items-center gap-1.5 shadow-2xl text-xs text-white backdrop-blur-xl"
+                  className="absolute -top-14 left-0 z-50 bg-white/95 border border-slate-200 rounded-xl p-1.5 flex items-center gap-1.5 shadow-xl text-xs text-slate-800 backdrop-blur-xl"
                   onMouseDown={e => e.stopPropagation()}
                 >
                   {/* Layer controls */}
-                  <div className="flex items-center gap-0.5 border-r border-white/15 pr-1.5">
+                  <div className="flex items-center gap-0.5 border-r border-slate-200 pr-1.5">
                     <button
                       onClick={() => handleBringToFront(ann)}
-                      className="p-1.5 hover:bg-white/10 rounded text-slate-300 hover:text-amber-400"
+                      className="p-1.5 hover:bg-slate-100 rounded text-slate-600 hover:text-amber-600"
                       title="Traer al frente (Capa superior)"
                     >
                       <BringToFront className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => handleSendToBack(ann)}
-                      className="p-1.5 hover:bg-white/10 rounded text-slate-300 hover:text-amber-400"
+                      className="p-1.5 hover:bg-slate-100 rounded text-slate-600 hover:text-amber-600"
                       title="Enviar al fondo (Capa inferior)"
                     >
                       <SendToBack className="w-3.5 h-3.5" />
@@ -641,7 +641,7 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
 
                   <button
                     onClick={() => onCopyAnn(ann)}
-                    className="p-1.5 hover:bg-white/10 rounded text-slate-300 hover:text-amber-400"
+                    className="p-1.5 hover:bg-slate-100 rounded text-slate-600 hover:text-amber-600"
                     title="Copiar elemento (Ctrl+C)"
                   >
                     <Copy className="w-3.5 h-3.5" />
@@ -653,21 +653,21 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
                       <select
                         value={ann.fontFamily || "'Inter', sans-serif"}
                         onChange={e => onUpdateAnn({ ...ann, fontFamily: e.target.value })}
-                        className="bg-black/60 border border-white/15 rounded px-2 py-1 text-[11px] text-white focus:outline-none"
+                        className="bg-slate-100 border border-slate-200 rounded px-2 py-1 text-[11px] text-slate-800 focus:outline-none"
                       >
                         {FONT_OPTIONS.map(f => (
                           <option key={f.value} value={f.value}>{f.label}</option>
                         ))}
                       </select>
 
-                      <div className="flex items-center gap-1 px-1 bg-black/40 rounded border border-white/10">
+                      <div className="flex items-center gap-1 px-1 bg-slate-100 rounded border border-slate-200">
                         <input
                           type="number"
                           min="8"
                           max="96"
                           value={ann.fontSize || 18}
                           onChange={e => onUpdateAnn({ ...ann, fontSize: Number(e.target.value) })}
-                          className="w-10 bg-transparent text-center text-xs font-mono font-bold text-amber-300 focus:outline-none"
+                          className="w-10 bg-transparent text-center text-xs font-mono font-bold text-slate-800 focus:outline-none"
                         />
                         <span className="text-[10px] text-slate-400">pt</span>
                       </div>
@@ -676,7 +676,7 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
                         <button
                           onClick={() => onUpdateAnn({ ...ann, isBold: !ann.isBold })}
                           className={`p-1.5 rounded text-xs font-black ${
-                            ann.isBold ? 'bg-amber-400 text-slate-950' : 'text-slate-300 hover:bg-white/10'
+                            ann.isBold ? 'bg-amber-400 text-slate-950' : 'text-slate-600 hover:bg-slate-100'
                           }`}
                           title="Negrita"
                         >
@@ -685,7 +685,7 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
                         <button
                           onClick={() => onUpdateAnn({ ...ann, isItalic: !ann.isItalic })}
                           className={`p-1.5 rounded text-xs font-black ${
-                            ann.isItalic ? 'bg-amber-400 text-slate-950' : 'text-slate-300 hover:bg-white/10'
+                            ann.isItalic ? 'bg-amber-400 text-slate-950' : 'text-slate-600 hover:bg-slate-100'
                           }`}
                           title="Cursiva"
                         >
@@ -694,7 +694,7 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
                         <button
                           onClick={() => onUpdateAnn({ ...ann, isUnderline: !ann.isUnderline })}
                           className={`p-1.5 rounded text-xs font-black ${
-                            ann.isUnderline ? 'bg-amber-400 text-slate-950' : 'text-slate-300 hover:bg-white/10'
+                            ann.isUnderline ? 'bg-amber-400 text-slate-950' : 'text-slate-600 hover:bg-slate-100'
                           }`}
                           title="Subrayado"
                         >
@@ -702,7 +702,7 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
                         </button>
                       </div>
 
-                      <label className="flex items-center gap-1 p-1 hover:bg-white/10 rounded cursor-pointer" title="Color de texto">
+                      <label className="flex items-center gap-1 p-1 hover:bg-slate-100 rounded cursor-pointer" title="Color de texto">
                         <input
                           type="color"
                           value={ann.color || '#000000'}
@@ -718,33 +718,33 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => handleAddTableRow(ann)}
-                        className="px-2 py-1 bg-white/10 hover:bg-white/20 rounded text-[10px] font-bold"
+                        className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded text-[10px] font-bold"
                         title="Añadir fila"
                       >
                         + Fila
                       </button>
                       <button
                         onClick={() => handleRemoveTableRow(ann)}
-                        className="px-2 py-1 bg-white/10 hover:bg-white/20 rounded text-[10px] font-bold"
+                        className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded text-[10px] font-bold"
                         title="Quitar fila"
                       >
                         - Fila
                       </button>
                       <button
                         onClick={() => handleAddTableCol(ann)}
-                        className="px-2 py-1 bg-white/10 hover:bg-white/20 rounded text-[10px] font-bold"
+                        className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded text-[10px] font-bold"
                         title="Añadir columna"
                       >
                         + Col
                       </button>
                       <button
                         onClick={() => handleRemoveTableCol(ann)}
-                        className="px-2 py-1 bg-white/10 hover:bg-white/20 rounded text-[10px] font-bold"
+                        className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded text-[10px] font-bold"
                         title="Quitar columna"
                       >
                         - Col
                       </button>
-                      <label className="flex items-center gap-1 p-1 hover:bg-white/10 rounded cursor-pointer" title="Color de borde">
+                      <label className="flex items-center gap-1 p-1 hover:bg-slate-100 rounded cursor-pointer" title="Color de borde">
                         <input
                           type="color"
                           value={ann.tableData?.borderColor || '#94a3b8'}
@@ -775,7 +775,7 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
                         />
                         <span className="text-[10px] text-slate-400">px</span>
                       </div>
-                      <label className="flex items-center gap-1 p-1 hover:bg-white/10 rounded cursor-pointer" title="Color de trazo">
+                      <label className="flex items-center gap-1 p-1 hover:bg-slate-100 rounded cursor-pointer" title="Color de trazo">
                         <input
                           type="color"
                           value={ann.color || '#dc2626'}
@@ -790,7 +790,7 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
                   {ann.type === 'stamp' && (
                     <div className="flex items-center gap-1.5 px-1">
                       <span className="font-mono text-[10px] text-amber-400 font-bold">{ann.stampLabel}</span>
-                      <label className="flex items-center gap-1 p-0.5 hover:bg-white/10 rounded cursor-pointer" title="Color del sello">
+                      <label className="flex items-center gap-1 p-0.5 hover:bg-slate-100 rounded cursor-pointer" title="Color del sello">
                         <input
                           type="color"
                           value={ann.color || '#dc2626'}

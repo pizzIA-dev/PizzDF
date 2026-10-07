@@ -129,25 +129,25 @@ export const SignatureModal: React.FC<SignatureModalProps> = ({ isOpen, onClose,
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-      <div className="bg-[#0b0f1a] border border-white/15 rounded-3xl w-full max-w-lg p-6 space-y-5 shadow-2xl">
+      <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-lg p-6 space-y-5 shadow-2xl text-slate-800">
         
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-white/10 pb-3">
-          <div className="flex items-center gap-2.5 text-white font-extrabold text-base">
+        <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div className="flex items-center gap-2.5 text-slate-900 font-extrabold text-base">
             <Edit3 className="w-5 h-5 text-amber-400" />
             <span>Crear Firma Digital</span>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg">
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-700 p-1 rounded-lg">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Tab switchers */}
-        <div className="grid grid-cols-3 gap-1 bg-black/40 p-1 rounded-xl border border-white/10 text-xs font-bold">
+        <div className="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold">
           <button
             onClick={() => setTab('draw')}
             className={`py-2 rounded-lg flex items-center justify-center gap-1.5 transition ${
-              tab === 'draw' ? 'bg-amber-400 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
+              tab === 'draw' ? 'bg-amber-400 text-slate-950 font-black' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <Edit3 className="w-3.5 h-3.5" />
@@ -156,7 +156,7 @@ export const SignatureModal: React.FC<SignatureModalProps> = ({ isOpen, onClose,
           <button
             onClick={() => setTab('type')}
             className={`py-2 rounded-lg flex items-center justify-center gap-1.5 transition ${
-              tab === 'type' ? 'bg-amber-400 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
+              tab === 'type' ? 'bg-amber-400 text-slate-950 font-black' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <Type className="w-3.5 h-3.5" />
@@ -165,7 +165,7 @@ export const SignatureModal: React.FC<SignatureModalProps> = ({ isOpen, onClose,
           <button
             onClick={() => setTab('upload')}
             className={`py-2 rounded-lg flex items-center justify-center gap-1.5 transition ${
-              tab === 'upload' ? 'bg-amber-400 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
+              tab === 'upload' ? 'bg-amber-400 text-slate-950 font-black' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <UploadCloud className="w-3.5 h-3.5" />
@@ -177,7 +177,7 @@ export const SignatureModal: React.FC<SignatureModalProps> = ({ isOpen, onClose,
         {tab === 'draw' && (
           <div className="space-y-3">
             {/* Ink color and thickness */}
-            <div className="flex items-center justify-between text-xs text-slate-400">
+            <div className="flex items-center justify-between text-xs text-slate-600 font-medium">
               <div className="flex items-center gap-2">
                 <span>Color:</span>
                 {[
@@ -213,7 +213,7 @@ export const SignatureModal: React.FC<SignatureModalProps> = ({ isOpen, onClose,
             </div>
 
             {/* Drawing Canvas */}
-            <div className="relative bg-white rounded-2xl overflow-hidden border-2 border-slate-700 shadow-inner">
+            <div className="relative bg-white rounded-2xl overflow-hidden border-2 border-slate-300 shadow-inner">
               <canvas
                 ref={canvasRef}
                 width={480}
@@ -238,18 +238,18 @@ export const SignatureModal: React.FC<SignatureModalProps> = ({ isOpen, onClose,
         {tab === 'type' && (
           <div className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300">Tu nombre completo o iniciales:</label>
+              <label className="text-xs font-semibold text-slate-800">Tu nombre completo o iniciales:</label>
               <input
                 type="text"
                 value={typedName}
                 onChange={e => setTypedName(e.target.value)}
                 placeholder="Ej. Luis Angel Pérez"
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-white/20 text-white text-sm focus:border-amber-400 focus:outline-none"
+                className="w-full px-4 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-sm focus:border-amber-400 focus:outline-none"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300">Estilo de caligrafía:</label>
+              <label className="text-xs font-semibold text-slate-800">Estilo de caligrafía:</label>
               <div className="grid grid-cols-2 gap-2">
                 {[
                   { id: 'Caveat' as const, label: 'Elegante Natural' },
@@ -260,8 +260,8 @@ export const SignatureModal: React.FC<SignatureModalProps> = ({ isOpen, onClose,
                     onClick={() => setSelectedFont(f.id)}
                     className={`p-3 rounded-xl border text-left transition ${
                       selectedFont === f.id
-                        ? 'border-amber-400 bg-amber-500/10 text-white shadow'
-                        : 'border-white/10 bg-slate-950/60 text-slate-400 hover:text-white'
+                        ? 'border-amber-400 bg-amber-500/10 text-slate-950 shadow'
+                        : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-slate-300 hover:bg-slate-100'
                     }`}
                   >
                     <span className="text-xs font-bold block">{f.label}</span>
@@ -277,7 +277,7 @@ export const SignatureModal: React.FC<SignatureModalProps> = ({ isOpen, onClose,
             </div>
 
             {/* Ink color picker for typed */}
-            <div className="flex items-center gap-2 text-xs text-slate-400">
+            <div className="flex items-center gap-2 text-xs text-slate-600 font-medium">
               <span>Color de tinta:</span>
               {['#0f172a', '#1d4ed8', '#047857'].map(hex => (
                 <button
@@ -295,7 +295,7 @@ export const SignatureModal: React.FC<SignatureModalProps> = ({ isOpen, onClose,
 
         {tab === 'upload' && (
           <div className="space-y-3">
-            <label className="border-2 border-dashed border-white/20 hover:border-amber-400 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer transition bg-slate-950/50">
+            <label className="border-2 border-dashed border-slate-300 hover:border-amber-400 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer transition bg-slate-50 hover:bg-amber-50/20">
               <input
                 type="file"
                 accept="image/png,image/jpeg"
@@ -303,7 +303,7 @@ export const SignatureModal: React.FC<SignatureModalProps> = ({ isOpen, onClose,
                 className="hidden"
               />
               <UploadCloud className="w-8 h-8 text-amber-400 mb-2" />
-              <span className="text-xs font-bold text-white">Haz clic para subir imagen de tu firma</span>
+              <span className="text-xs font-bold text-slate-800">Haz clic para subir imagen de tu firma</span>
               <span className="text-[11px] text-slate-500 mt-0.5">Formatos recomendados: PNG o JPG con fondo claro</span>
             </label>
 
@@ -316,11 +316,11 @@ export const SignatureModal: React.FC<SignatureModalProps> = ({ isOpen, onClose,
         )}
 
         {/* Modal Actions */}
-        <div className="flex items-center justify-between pt-2 border-t border-white/10">
+        <div className="flex items-center justify-between pt-2 border-t border-slate-200">
           {tab === 'draw' ? (
             <button
               onClick={clearCanvas}
-              className="px-3 py-1.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-red-400 text-xs font-bold flex items-center gap-1.5 transition"
+              className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-red-50 text-red-600 hover:text-red-700 border border-slate-200 hover:border-red-200 text-xs font-bold flex items-center gap-1.5 transition"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>Limpiar</span>
@@ -330,7 +330,7 @@ export const SignatureModal: React.FC<SignatureModalProps> = ({ isOpen, onClose,
           <div className="flex items-center gap-2">
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-slate-300 text-xs font-bold transition"
+              className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition border border-slate-200"
             >
               Cancelar
             </button>

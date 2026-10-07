@@ -103,7 +103,7 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
             className={`px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 ${
               activeTab === 'local'
                 ? 'bg-amber-400 text-slate-950 font-black shadow-md shadow-amber-500/20'
-                : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
             }`}
           >
             <QrCode className="w-3.5 h-3.5" />
@@ -114,7 +114,7 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
             className={`px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 ${
               activeTab === 'crypto'
                 ? 'bg-amber-400 text-slate-950 font-black shadow-md shadow-amber-500/20'
-                : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
             }`}
           >
             <Sparkles className="w-3.5 h-3.5" />
@@ -213,14 +213,14 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
 
               <div className="pt-1">
                 <span className="text-xs text-slate-700 font-semibold block">
-                  Titular: <span className="text-amber-400 font-bold">Luis Angel Sanchez Aguilar</span>
+                  Titular: <span className="text-amber-600 font-bold">Luis Angel Sanchez Aguilar</span>
                 </span>
               </div>
             </div>
           )}
 
           {activeTab === 'crypto' && (
-            <div className="space-y-3 bg-slate-900/60 border border-slate-800 rounded-xl p-4">
+            <div className="space-y-3 bg-slate-50 border border-slate-200 rounded-xl p-4">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 font-bold text-xs">
                   ₮
@@ -231,13 +231,13 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
                 </div>
               </div>
 
-              <div className="p-2.5 bg-black/40 rounded-lg border border-white/5 flex items-center justify-between gap-2">
-                <span className="font-mono text-[11px] text-slate-300 truncate">
+              <div className="p-2.5 bg-white rounded-lg border border-slate-300 shadow-sm flex items-center justify-between gap-2">
+                <span className="font-mono text-[11px] text-slate-900 truncate font-semibold">
                   TEF8EiYzaVQJo5T5KQxWzgM35HxLVsaLwq
                 </span>
                 <button
                   onClick={() => handleCopy('TEF8EiYzaVQJo5T5KQxWzgM35HxLVsaLwq', 'crypto')}
-                  className="px-2.5 py-1 rounded bg-white/[0.08] hover:bg-white/[0.15] text-[10px] font-bold text-slate-300 shrink-0 flex items-center gap-1 transition"
+                  className="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-[10px] font-bold text-slate-700 border border-slate-300 shrink-0 flex items-center gap-1 transition"
                 >
                   {copiedKey === 'crypto' ? (
                     <>

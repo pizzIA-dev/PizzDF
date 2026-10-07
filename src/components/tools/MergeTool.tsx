@@ -145,17 +145,17 @@ export const MergeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div className="flex items-center gap-3">
-          <button onClick={onBack} className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition">
+          <button onClick={onBack} className="p-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-slate-950 hover:bg-slate-50 shadow-sm transition">
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div>
-            <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
               <Files className="w-6 h-6 text-emerald-400" />
               Unir PDFs
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-600">
               Combina múltiples documentos PDF en uno solo con el orden exacto que necesitas.
             </p>
           </div>
@@ -193,7 +193,7 @@ export const MergeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       {/* Document List */}
       {items.length > 0 && (
         <div className="space-y-4 pt-4">
-          <div className="flex items-center justify-between text-xs text-slate-400 px-1">
+          <div className="flex items-center justify-between text-xs text-slate-600 px-1 font-medium">
             <span>Orden de unión (los archivos se combinarán de arriba hacia abajo):</span>
             <span className="text-emerald-400 font-bold">{items.length} archivos añadidos</span>
           </div>
@@ -227,17 +227,17 @@ export const MergeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       ? 'opacity-30 scale-[0.98] border-2 border-dashed border-amber-400 bg-amber-400/5'
                       : isDragOver
                       ? 'border-2 border-amber-400 bg-amber-400/10 scale-[1.01] shadow-[0_0_20px_rgba(251,191,36,0.25)] z-10'
-                      : 'bg-slate-900 border border-slate-800 hover:border-slate-700 shadow-sm'
+                      : 'bg-white border border-slate-200 hover:border-amber-400 shadow-sm'
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <GripVertical className="w-4 h-4 text-slate-500 cursor-grab" />
-                    <span className="w-7 h-7 rounded-xl bg-slate-800 text-slate-300 font-bold text-xs flex items-center justify-center">
+                    <span className="w-7 h-7 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center border border-slate-200">
                       {index + 1}
                     </span>
                     <div>
-                      <h4 className="text-sm font-semibold text-white">{item.file.name}</h4>
-                      <p className="text-xs text-slate-400 flex items-center gap-2 mt-0.5">
+                      <h4 className="text-sm font-semibold text-slate-900">{item.file.name}</h4>
+                      <p className="text-xs text-slate-500 flex items-center gap-2 mt-0.5">
                         <span>{item.pageCount} páginas</span>
                         <span>•</span>
                         <span>{formatFileSize(item.size)}</span>
@@ -249,7 +249,7 @@ export const MergeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     <button
                       disabled={index === 0}
                       onClick={() => handleMove(index, 'up')}
-                      className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-30 transition"
+                      className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 disabled:opacity-30 transition"
                       title="Subir posición"
                     >
                       <ArrowUp className="w-4 h-4" />
@@ -257,14 +257,14 @@ export const MergeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     <button
                       disabled={index === items.length - 1}
                       onClick={() => handleMove(index, 'down')}
-                      className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-30 transition"
+                      className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 disabled:opacity-30 transition"
                       title="Bajar posición"
                     >
                       <ArrowDown className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleRemove(index)}
-                      className="p-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 transition"
+                      className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 transition"
                       title="Quitar de la lista"
                     >
                       <Trash2 className="w-4 h-4" />

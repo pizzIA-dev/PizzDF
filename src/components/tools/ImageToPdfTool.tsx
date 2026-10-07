@@ -118,17 +118,17 @@ export const ImageToPdfTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div className="flex items-center gap-3">
-          <button onClick={onBack} className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition">
+          <button onClick={onBack} className="p-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-slate-950 hover:bg-slate-50 shadow-sm transition">
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div>
-            <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
               <FileSpreadsheet className="w-6 h-6 text-emerald-400" />
               Imágenes a PDF
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-600">
               Convierte fotos, comprobantes o capturas JPG y PNG en un solo documento PDF limpio.
             </p>
           </div>
@@ -166,7 +166,7 @@ export const ImageToPdfTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
 
       {items.length > 0 && (
         <div className="space-y-4 pt-4">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+          <div className="flex items-center justify-between text-xs text-slate-600">
             <span>Orden de las páginas en el PDF final:</span>
             <span className="text-emerald-400 font-bold">{items.length} imágenes cargadas</span>
           </div>
@@ -199,19 +199,19 @@ export const ImageToPdfTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
                       ? 'opacity-30 scale-95 border-2 border-dashed border-amber-400 bg-amber-400/5'
                       : isDragOver
                       ? 'border-2 border-amber-400 bg-amber-400/10 scale-[1.03] shadow-[0_0_20px_rgba(251,191,36,0.25)] z-10'
-                      : 'bg-slate-900 border border-slate-800 hover:border-slate-700 shadow'
+                      : 'bg-white border border-slate-200 hover:border-amber-400 shadow-sm'
                   }`}
                 >
                   <div className="flex items-center justify-between pb-2">
                     <div className="flex items-center gap-1.5">
                       <GripVertical className="w-3.5 h-3.5 text-slate-500" />
-                      <span className="text-xs font-bold text-slate-200">#{index + 1}</span>
+                      <span className="text-xs font-bold text-slate-800">#{index + 1}</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <button
                         disabled={index === 0}
                         onClick={() => handleMove(index, 'up')}
-                        className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-30 transition"
+                        className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 disabled:opacity-30 transition"
                         title="Mover antes"
                       >
                         <ArrowUp className="w-3 h-3" />
@@ -219,7 +219,7 @@ export const ImageToPdfTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
                       <button
                         disabled={index === items.length - 1}
                         onClick={() => handleMove(index, 'down')}
-                        className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-30 transition"
+                        className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 disabled:opacity-30 transition"
                         title="Mover después"
                       >
                         <ArrowDown className="w-3 h-3" />
@@ -234,7 +234,7 @@ export const ImageToPdfTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
                     </div>
                   </div>
 
-                  <div className="bg-slate-950/60 rounded-xl p-2 flex items-center justify-center min-h-[140px] overflow-hidden">
+                  <div className="bg-slate-100/60 rounded-xl p-2 flex items-center justify-center min-h-[140px] overflow-hidden">
                     <img
                       src={item.previewUrl}
                       alt={item.file.name}
@@ -242,7 +242,7 @@ export const ImageToPdfTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
                     />
                   </div>
 
-                  <div className="pt-2 text-[11px] text-slate-400 truncate">
+                  <div className="pt-2 text-[11px] text-slate-600 truncate">
                     {item.file.name}
                   </div>
                 </div>

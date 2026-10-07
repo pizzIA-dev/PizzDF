@@ -110,17 +110,17 @@ export const PdfToImageTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div className="flex items-center gap-3">
-          <button onClick={onBack} className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition">
+          <button onClick={onBack} className="p-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-slate-950 hover:bg-slate-50 shadow-sm transition">
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div>
-            <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
               <ImageIcon className="w-6 h-6 text-amber-400" />
               PDF a Imágenes
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-600">
               Convierte cada página en imágenes nítidas de alta resolución (JPG o PNG) y descárgalas en ZIP.
             </p>
           </div>
@@ -133,7 +133,7 @@ export const PdfToImageTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
                 setFile(null);
                 setImages([]);
               }}
-              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition flex items-center gap-1.5"
+              className="px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 hover:text-slate-950 shadow-sm transition flex items-center gap-1.5"
             >
               <RefreshCw className="w-3.5 h-3.5" />
               Cambiar Archivo
@@ -173,7 +173,7 @@ export const PdfToImageTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
       ) : loading ? (
         <div className="py-24 text-center space-y-4">
           <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-slate-300 text-sm font-medium">Renderizando páginas en alta resolución...</p>
+          <p className="text-slate-700 text-sm font-medium">Renderizando páginas en alta resolución...</p>
         </div>
       ) : (
         <div className="space-y-6">
@@ -181,20 +181,20 @@ export const PdfToImageTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
             {images.map((img) => (
               <div
                 key={img.pageNum}
-                className="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 flex flex-col justify-between hover:border-slate-700 transition shadow-md"
+                className="bg-white border border-slate-200 rounded-2xl p-3.5 flex flex-col justify-between hover:border-amber-400 transition shadow-sm"
               >
                 <div className="flex items-center justify-between pb-2">
-                  <span className="text-xs font-bold text-slate-200">Pág. {img.pageNum}</span>
+                  <span className="text-xs font-bold text-slate-800">Pág. {img.pageNum}</span>
                   <button
                     onClick={() => handleDownloadSingle(img)}
-                    className="p-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-400 transition"
+                    className="p-1 rounded-lg bg-slate-100 hover:bg-amber-100 text-slate-700 hover:text-amber-700 border border-slate-200 transition"
                     title="Descargar esta imagen"
                   >
                     <Download className="w-3.5 h-3.5" />
                   </button>
                 </div>
 
-                <div className="bg-slate-950/60 rounded-xl p-2 flex items-center justify-center min-h-[160px] overflow-hidden">
+                <div className="bg-slate-100/70 rounded-xl p-2 flex items-center justify-center min-h-[160px] overflow-hidden border border-slate-200/60">
                   <img
                     src={img.dataUrl}
                     alt={`Página ${img.pageNum}`}
