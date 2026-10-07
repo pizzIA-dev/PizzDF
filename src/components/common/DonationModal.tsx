@@ -167,7 +167,7 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
               </a>
 
               <a
-                href="https://paypal.me"
+                href="https://paypal.me/luislasabills"
                 target="_blank"
                 rel="noreferrer"
                 className="group p-3.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-amber-400/50 flex items-center justify-between transition hover:shadow-lg hover:shadow-amber-500/5"
@@ -189,37 +189,65 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
           )}
 
           {activeTab === 'local' && (
-            <div className="space-y-3 bg-slate-900/60 border border-slate-800 rounded-xl p-4 text-center">
-              <div className="w-12 h-12 mx-auto rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
-                <QrCode className="w-6 h-6" />
-              </div>
+            <div className="space-y-4 bg-slate-900/80 border border-slate-800 rounded-2xl p-5 text-center">
               <div>
-                <h4 className="text-xs font-bold text-white">Yape & Plin (Perú)</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">
-                  Escanea o transfiere directamente con el número de apoyo:
+                <h4 className="text-sm font-black text-white flex items-center justify-center gap-2">
+                  <span className="text-purple-400">Yape</span>
+                  <span className="text-slate-600">/</span>
+                  <span className="text-cyan-400">Plin</span>
+                  <span className="text-xs font-bold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/20">
+                    Perú
+                  </span>
+                </h4>
+                <p className="text-xs text-slate-400 mt-1">
+                  Abre tu app en el celular y escanea el código QR en pantalla:
                 </p>
               </div>
 
-              <div className="p-3 bg-black/40 rounded-lg border border-white/5 flex items-center justify-between gap-2 max-w-xs mx-auto">
-                <span className="font-mono text-sm font-bold text-amber-400">
-                  +51 987 654 321
-                </span>
-                <button
-                  onClick={() => handleCopy('+51 987 654 321', 'yape')}
-                  className="px-2.5 py-1 rounded bg-white/[0.08] hover:bg-white/[0.15] text-[10px] font-bold text-slate-300 flex items-center gap-1 transition"
-                >
-                  {copiedKey === 'yape' ? (
-                    <>
-                      <Check className="w-3 h-3 text-emerald-400" />
-                      Copiado
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3 h-3" />
-                      Copiar
-                    </>
-                  )}
-                </button>
+              {/* QR Container */}
+              <div className="relative mx-auto w-44 h-44 bg-white p-3 rounded-2xl shadow-xl shadow-purple-500/10 border-2 border-amber-400 flex flex-col items-center justify-center">
+                <img
+                  src="/qr-donacion.png"
+                  alt="Código QR Yape y Plin"
+                  onError={(e) => {
+                    // Fallback to high-contrast visual QR generator icon
+                    (e.target as HTMLElement).style.display = 'none';
+                    const fallback = (e.target as HTMLElement).nextElementSibling as HTMLElement;
+                    if (fallback) fallback.style.display = 'flex';
+                  }}
+                  className="w-full h-full object-contain rounded-lg"
+                />
+                <div style={{ display: 'none' }} className="w-full h-full flex-col items-center justify-center text-slate-900 text-center p-2">
+                  <QrCode className="w-20 h-20 text-purple-700 mx-auto" />
+                  <span className="text-[10px] font-black text-slate-800 mt-1">Coloca tu QR en</span>
+                  <span className="text-[9px] font-mono text-purple-600 font-bold">public/qr-donacion.png</span>
+                </div>
+              </div>
+
+              {/* Alternative: Copy phone number */}
+              <div className="pt-1">
+                <span className="text-[11px] text-slate-400 block mb-1.5">O transfiere al número registrado:</span>
+                <div className="p-2.5 bg-black/50 rounded-xl border border-white/10 flex items-center justify-between gap-3 max-w-xs mx-auto">
+                  <span className="font-mono text-xs sm:text-sm font-bold text-amber-400 tracking-wider">
+                    +51 987 654 321
+                  </span>
+                  <button
+                    onClick={() => handleCopy('+51 987 654 321', 'yape')}
+                    className="px-2.5 py-1 rounded-lg bg-white/[0.08] hover:bg-white/[0.15] text-[11px] font-bold text-slate-200 flex items-center gap-1 transition active:scale-95"
+                  >
+                    {copiedKey === 'yape' ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>Copiado</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span>Copiar</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           )}
