@@ -226,17 +226,17 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
                   ₮
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-white">USDT (Red TRC20 / Binance Smart Chain)</h4>
-                  <p className="text-[10px] text-slate-400">Billetera universal de donación cripto</p>
+                  <h4 className="text-xs font-bold text-white">USDT (Red TRC20 / TRON)</h4>
+                  <p className="text-[10px] text-slate-400">Billetera oficial para donaciones en USDT (Red TRON)</p>
                 </div>
               </div>
 
               <div className="p-2.5 bg-black/40 rounded-lg border border-white/5 flex items-center justify-between gap-2">
                 <span className="font-mono text-[11px] text-slate-300 truncate">
-                  TXYZ987654321PizzDFDonationTRC20SampleAddress
+                  TEF8EiYzaVQJo5T5KQxWzgM35HxLVsaLwq
                 </span>
                 <button
-                  onClick={() => handleCopy('TXYZ987654321PizzDFDonationTRC20SampleAddress', 'crypto')}
+                  onClick={() => handleCopy('TEF8EiYzaVQJo5T5KQxWzgM35HxLVsaLwq', 'crypto')}
                   className="px-2.5 py-1 rounded bg-white/[0.08] hover:bg-white/[0.15] text-[10px] font-bold text-slate-300 shrink-0 flex items-center gap-1 transition"
                 >
                   {copiedKey === 'crypto' ? (
