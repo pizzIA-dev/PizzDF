@@ -22,7 +22,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ currentTool, onSelectTool, onOpenDonation }) => {
   return (
-    <header className="sticky top-0 z-50 bg-[#090d16]/90 backdrop-blur-xl border-b-2 border-amber-500/30 shadow-[0_4px_30px_rgba(0,0,0,0.6)]">
+    <header className="sticky top-0 z-50 bg-[#0f172a]/95 backdrop-blur-xl border-b border-amber-500/30 shadow-[0_4px_30px_rgba(0,0,0,0.6)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           
@@ -32,7 +32,7 @@ export const Header: React.FC<HeaderProps> = ({ currentTool, onSelectTool, onOpe
             className="flex items-center gap-3.5 cursor-pointer group select-none"
           >
             <div className="relative w-11 h-11 bg-gradient-to-tr from-amber-500 via-amber-400 to-orange-500 p-[2px] faceted-cut shadow-[0_0_15px_rgba(245,158,11,0.4)] group-hover:shadow-[0_0_25px_rgba(245,158,11,0.7)] transition-all duration-300">
-              <div className="w-full h-full bg-[#080b13] flex items-center justify-center">
+              <div className="w-full h-full bg-[#0f172a] flex items-center justify-center">
                 <Pizza className="w-6 h-6 text-amber-400 group-hover:rotate-12 transition-transform duration-300" />
               </div>
             </div>
@@ -53,7 +53,7 @@ export const Header: React.FC<HeaderProps> = ({ currentTool, onSelectTool, onOpe
           </div>
 
           {/* Quick Tool Navigation (Slanted faceted tabs) */}
-          <div className="hidden md:flex items-center gap-1.5 bg-black/40 p-1.5 border border-white/10 faceted-cut">
+          <div className="hidden md:flex items-center gap-1.5 bg-slate-800/80 p-1.5 border border-white/15 faceted-cut">
             {[
               { id: 'organize' as ToolId, label: 'Organizar', icon: Layers },
               { id: 'editor' as ToolId, label: 'Editor', icon: FileEdit },

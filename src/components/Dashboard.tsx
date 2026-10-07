@@ -14,7 +14,8 @@ import {
   ArrowRight,
   Search,
   CheckCircle2,
-  Lock
+  Lock,
+  ExternalLink
 } from 'lucide-react';
 import type { ToolId, ToolDef } from '../types';
 
@@ -195,7 +196,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectTool }) => {
               placeholder="Buscar herramienta (ej. editar, organizar)..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-[#090d16] border border-white/15 faceted-cut text-xs font-medium text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition"
+              className="w-full pl-10 pr-4 py-2.5 bg-slate-800/80 border border-slate-700/80 text-white placeholder-slate-400 faceted-cut text-xs font-medium text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition"
             />
           </div>
         </div>
@@ -216,7 +217,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectTool }) => {
               className={`slanted-tab px-4 py-2 text-xs font-bold transition-all duration-200 ${
                 selectedCategory === cat.id
                   ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-extrabold shadow-md'
-                  : 'bg-[#0f1422] text-slate-300 hover:text-white hover:bg-white/[0.08] border border-white/10'
+                  : 'bg-slate-800/80 text-slate-200 hover:text-white hover:bg-slate-700/80 border border-white/15'
               }`}
             >
               <span className="slanted-tab-inner inline-block">
@@ -323,6 +324,42 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectTool }) => {
         </div>
       </div>
 
+      {/* Trojan Horse Agency & Creator Banner (PizzIA & Luis Lasa) */}
+      <div className="faceted-card p-6 sm:p-8 bg-gradient-to-r from-slate-900/95 via-slate-800/90 to-slate-900/95 border border-amber-400/40 rounded-2xl flex flex-col lg:flex-row items-center justify-between gap-6 shadow-2xl shadow-amber-500/5">
+        <div className="space-y-2.5 text-center lg:text-left">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-xs font-bold font-mono">
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <span>INGENIERÍA DE SOFTWARE & IA</span>
+          </div>
+          <h3 className="text-xl sm:text-2xl font-black text-white">
+            ¿Buscas una solución web, SaaS o sistema inteligente a medida?
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
+            PizzDF es un proyecto libre creado por <a href="https://luislasa.dev" target="_blank" rel="noreferrer" className="text-amber-400 hover:underline font-bold inline-flex items-center gap-0.5">Luis Lasa <ExternalLink className="w-3 h-3 inline" /></a> y el equipo de <a href="https://pizzia.org" target="_blank" rel="noreferrer" className="text-amber-400 hover:underline font-bold inline-flex items-center gap-0.5">PizzIA <ExternalLink className="w-3 h-3 inline" /></a>. Construimos plataformas digitales de alto rendimiento, productos SaaS escalables y agentes de inteligencia artificial para empresas.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
+          <a
+            href="https://pizzia.org"
+            target="_blank"
+            rel="noreferrer"
+            className="px-5 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20 transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
+          >
+            <span>Conoce PizzIA.org</span>
+            <ArrowRight className="w-4 h-4" />
+          </a>
+          <a
+            href="https://luislasa.dev"
+            target="_blank"
+            rel="noreferrer"
+            className="px-4 py-3 rounded-xl bg-slate-800/90 hover:bg-slate-700/90 border border-white/20 text-slate-100 hover:text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5"
+          >
+            <span>luislasa.dev</span>
+            <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+          </a>
+        </div>
+      </div>
     </div>
   );
 };
