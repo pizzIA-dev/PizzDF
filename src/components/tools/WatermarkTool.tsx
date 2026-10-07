@@ -1,0 +1,255 @@
+﻿import React, { useState } from 'react';
+import { 
+  ArrowLeft, 
+  Stamp, 
+  Download, 
+  RefreshCw,
+  Sliders,
+  Sparkles
+} from 'lucide-react';
+import { FileDropzone } from '../common/FileDropzone';
+import { ToastNotification, type ToastMessage } from '../common/ToastNotification';
+import { addWatermark, downloadBlob } from '../../utils/pdfHelper';
+
+export const WatermarkTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
+  const [file, setFile] = useState<File | null>(null);
+  const [toasts, setToasts] = useState<ToastMessage[]>([]);
+
+  const addToast = (type: 'error' | 'success' | 'info', message: string) => {
+    const id = `${Date.now()}-${Math.random()}`;
+    setToasts(prev => [...prev, { id, type, message }]);
+    setTimeout(() => {
+      setToasts(prev => prev.filter(t => t.id !== id));
+    }, 3500);
+  };
+
+  const removeToast = (id: string) => {
+    setToasts(prev => prev.filter(t => t.id !== id));
+  };
+
+  const [fileBuffer, setFileBuffer] = useState<ArrayBuffer | null>(null);
+  const [text, setText] = useState('CONFIDENCIAL');
+  const [colorHex, setColorHex] = useState('#ef4444');
+  const [opacity, setOpacity] = useState(0.25);
+  const [size, setSize] = useState(48);
+  const [angle, setAngle] = useState(45);
+  const [processing, setProcessing] = useState(false);
+
+  const handleFileSelected = async (files: File[]) => {
+    if (!files || files.length === 0) return;
+    const selectedFile = files[0];
+    setFile(selectedFile);
+
+    try {
+      const buffer = await selectedFile.arrayBuffer();
+      setFileBuffer(buffer);
+    } catch (err) {
+      console.error(err);
+      addToast('error', 'Error al leer el archivo PDF.');
+    }
+  };
+
+  const handleDownload = async () => {
+    if (!fileBuffer || !file) return;
+    setProcessing(true);
+
+    try {
+      const resultBytes = await addWatermark(fileBuffer, text, {
+        opacity,
+        size,
+        angle,
+        colorHex,
+      });
+
+      const blob = new Blob([resultBytes as Uint8Array<ArrayBuffer>], { type: 'application/pdf' });
+      const originalName = file.name.replace('.pdf', '');
+      downloadBlob(blob, `${originalName}_marca_de_agua.pdf`);
+    } catch (err) {
+      console.error(err);
+      addToast('error', 'Error al aplicar la marca de agua.');
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+        <div className="flex items-center gap-3">
+          <button onClick={onBack} className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition">
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          <div>
+            <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+              <Stamp className="w-6 h-6 text-cyan-400" />
+              Marca de Agua
+            </h2>
+            <p className="text-xs text-slate-400">
+              Protege tus documentos añadiendo textos personalizados en diagonal o en horizontal con transparencia.
+            </p>
+          </div>
+        </div>
+
+        {file && (
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                setFile(null);
+                setFileBuffer(null);
+              }}
+              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition flex items-center gap-1.5"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              Cambiar Archivo
+            </button>
+
+            <button
+              onClick={handleDownload}
+              disabled={processing || !text.trim()}
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/20 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 flex items-center gap-2"
+            >
+              {processing ? (
+                <>
+                  <RefreshCw className="w-4 h-4 animate-spin" />
+                  <span>Aplicando marca...</span>
+                </>
+              ) : (
+                <>
+                  <Download className="w-4 h-4" />
+                  <span>Descargar con Marca de Agua</span>
+                </>
+              )}
+            </button>
+          </div>
+        )}
+      </div>
+
+      {!file ? (
+        <div className="py-12">
+          <FileDropzone
+            onFilesSelected={handleFileSelected}
+            title="Sube el PDF para añadir marca de agua"
+            subtitle="Personaliza el texto, la inclinación, la opacidad y los colores en tiempo real"
+          />
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+          {/* Controls */}
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-5">
+            <h3 className="text-base font-bold text-white flex items-center gap-2">
+              <Sliders className="w-4 h-4 text-cyan-400" />
+              Ajustes de la Marca
+            </h3>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-300">Texto de la marca:</label>
+              <input
+                type="text"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="Ej. CONFIDENCIAL, COPIA, BORRADOR..."
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-cyan-500 focus:outline-none"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <div className="flex justify-between text-xs font-semibold text-slate-300">
+                <span>Opacidad:</span>
+                <span className="font-mono text-cyan-400">{Math.round(opacity * 100)}%</span>
+              </div>
+              <input
+                type="range"
+                min="0.05"
+                max="0.9"
+                step="0.05"
+                value={opacity}
+                onChange={(e) => setOpacity(parseFloat(e.target.value))}
+                className="w-full accent-cyan-400"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <div className="flex justify-between text-xs font-semibold text-slate-300">
+                <span>Tamaño de fuente:</span>
+                <span className="font-mono text-cyan-400">{size} pt</span>
+              </div>
+              <input
+                type="range"
+                min="20"
+                max="80"
+                step="2"
+                value={size}
+                onChange={(e) => setSize(parseInt(e.target.value))}
+                className="w-full accent-cyan-400"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <div className="flex justify-between text-xs font-semibold text-slate-300">
+                <span>Inclinación (Ángulo):</span>
+                <span className="font-mono text-cyan-400">{angle}°</span>
+              </div>
+              <div className="flex gap-2">
+                {[0, 30, 45, -45].map(deg => (
+                  <button
+                    key={deg}
+                    onClick={() => setAngle(deg)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                      angle === deg ? 'bg-cyan-500 text-slate-950' : 'bg-slate-800 text-slate-300'
+                    }`}
+                  >
+                    {deg === 0 ? 'Horizontal (0°)' : `${deg}°`}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-300">Color de la marca:</label>
+              <div className="flex items-center gap-2">
+                {['#ef4444', '#3b82f6', '#10b981', '#6b7280', '#000000'].map(c => (
+                  <button
+                    key={c}
+                    onClick={() => setColorHex(c)}
+                    className={`w-7 h-7 rounded-xl border-2 transition ${
+                      colorHex === c ? 'border-white scale-110' : 'border-transparent'
+                    }`}
+                    style={{ backgroundColor: c }}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Live Preview Simulation */}
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col items-center">
+            <span className="text-xs font-semibold text-slate-400 mb-4">Vista previa simulada</span>
+            <div className="relative w-[280px] h-[380px] bg-white rounded-xl shadow-2xl p-6 flex items-center justify-center overflow-hidden border border-slate-300">
+              <div className="space-y-3 opacity-20 pointer-events-none w-full">
+                <div className="h-4 bg-slate-900 rounded w-3/4" />
+                <div className="h-2 bg-slate-400 rounded w-full" />
+                <div className="h-2 bg-slate-400 rounded w-full" />
+                <div className="h-2 bg-slate-400 rounded w-4/5" />
+                <div className="h-2 bg-slate-400 rounded w-full" />
+                <div className="h-2 bg-slate-400 rounded w-2/3" />
+              </div>
+
+              <div
+                className="absolute font-extrabold uppercase select-none pointer-events-none text-center"
+                style={{
+                  color: colorHex,
+                  opacity: opacity,
+                  fontSize: `${size * 0.55}px`,
+                  transform: `rotate(${-angle}deg)`,
+                }}
+              >
+                {text || 'MARCA DE AGUA'}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      <ToastNotification toasts={toasts} onDismiss={removeToast} />
+</div>
+  );
+};

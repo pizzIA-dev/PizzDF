@@ -1,0 +1,126 @@
+﻿@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-tech: 'Rajdhani', var(--font-sans);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #07090e;
+    color: #f1f5f9;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+}
+
+/* Ambient glow & backdrop */
+.ambient-glow {
+  position: fixed;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 50% -10%, rgba(245, 158, 11, 0.16) 0%, rgba(217, 119, 6, 0.05) 35%, transparent 70%),
+    radial-gradient(circle at 85% 60%, rgba(14, 165, 233, 0.06) 0%, transparent 50%),
+    linear-gradient(to bottom, #07090e 0%, #040508 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Faceted geometric cuts inspired by Bandai Namco AAA gaming UI */
+.faceted-cut {
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+}
+
+.faceted-card {
+  position: relative;
+  background: linear-gradient(145deg, rgba(17, 24, 39, 0.9) 0%, rgba(10, 14, 26, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.faceted-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 18px;
+  height: 18px;
+  border-left: 1px solid rgba(245, 158, 11, 0.5);
+  border-bottom: 1px solid rgba(245, 158, 11, 0.5);
+  pointer-events: none;
+}
+
+.faceted-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(245, 158, 11, 0.5);
+  box-shadow: 
+    0 15px 35px -10px rgba(0, 0, 0, 0.8),
+    0 0 25px -5px rgba(245, 158, 11, 0.25);
+}
+
+/* Slanted pill tabs */
+.slanted-tab {
+  transform: skewX(-12deg);
+  transition: all 0.2s ease;
+}
+.slanted-tab-inner {
+  transform: skewX(12deg);
+}
+
+/* Sharp AAA Action Button */
+.btn-primary-sharp {
+  position: relative;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  color: #0b0f19;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.35);
+}
+
+.btn-primary-sharp:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 6px 28px rgba(245, 158, 11, 0.55);
+  transform: translateY(-1px);
+}
+
+.btn-primary-sharp:active {
+  transform: translateY(1px);
+}
+
+/* Secondary Sharp Button */
+.btn-secondary-sharp {
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary-sharp:hover {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #07090e;
+}
+::-webkit-scrollbar-thumb {
+  background: #f59e0b;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #fbbf24;
+}
