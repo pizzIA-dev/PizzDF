@@ -81,7 +81,7 @@ export const WatermarkTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           </button>
           <div>
             <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-              <Stamp className="w-6 h-6 text-cyan-400" />
+              <Stamp className="w-6 h-6 text-[var(--tomato)]" />
               Marca de Agua
             </h2>
             <p className="text-xs text-slate-600">
@@ -106,7 +106,7 @@ export const WatermarkTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             <button
               onClick={handleDownload}
               disabled={processing || !text.trim()}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/20 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 flex items-center gap-2"
+              className="px-5 py-2.5 rounded-xl font-bold text-sm disabled:opacity-50 flex items-center gap-2 btn-primary-sharp"
             >
               {processing ? (
                 <>

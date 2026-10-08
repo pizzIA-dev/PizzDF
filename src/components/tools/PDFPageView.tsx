@@ -509,7 +509,7 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
       className="flex flex-col items-center space-y-2 select-none"
     >
       {/* Page Header */}
-      <div className="self-start px-3 py-1 rounded-md bg-[#0e1424] border border-white/10 text-[11px] font-mono font-bold text-slate-400">
+      <div className="self-start px-3 py-1 rounded-md bg-white border border-slate-300 text-[11px] font-mono font-bold text-slate-700">
         Página {pageNumber}
       </div>
 
@@ -763,7 +763,7 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
                   {/* Draw Properties */}
                   {ann.type === 'draw' && (
                     <>
-                      <div className="flex items-center gap-1 px-1 bg-black/40 rounded border border-white/10">
+                      <div className="flex items-center gap-1 px-1 bg-slate-100 rounded border border-slate-200">
                         <span className="text-[10px] text-slate-400">Grosor:</span>
                         <input
                           type="number"

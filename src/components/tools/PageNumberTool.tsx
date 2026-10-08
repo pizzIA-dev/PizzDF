@@ -77,7 +77,7 @@ export const PageNumberTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
           </button>
           <div>
             <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-              <Hash className="w-6 h-6 text-violet-400" />
+              <Hash className="w-6 h-6 text-[var(--tomato)]" />
               Numerar Páginas
             </h2>
             <p className="text-xs text-slate-600">
@@ -102,7 +102,7 @@ export const PageNumberTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
             <button
               onClick={handleDownload}
               disabled={processing}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-400 hover:to-purple-400 text-white font-bold text-sm shadow-lg shadow-violet-500/20 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 flex items-center gap-2"
+              className="px-5 py-2.5 rounded-xl font-bold text-sm disabled:opacity-50 flex items-center gap-2 btn-primary-sharp"
             >
               {processing ? (
                 <>

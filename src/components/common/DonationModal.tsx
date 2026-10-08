@@ -42,7 +42,7 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-md animate-in fade-in duration-200">
       <div 
         onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-lg bg-white border-2 border-amber-400 rounded-2xl shadow-2xl text-slate-800 overflow-hidden flex flex-col"

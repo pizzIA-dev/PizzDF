@@ -309,7 +309,7 @@ export const SplitTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           </button>
           <div>
             <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-              <Scissors className="w-6 h-6 text-purple-400" />
+              <Scissors className="w-6 h-6 text-[var(--tomato)]" />
               Dividir y Separar PDF
             </h2>
             <p className="text-xs text-slate-600">
@@ -335,7 +335,7 @@ export const SplitTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             <button
               onClick={handleExecuteSplit}
               disabled={processing || (splitMode === 'extract' && selectedPages.length === 0)}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 text-white font-bold text-sm shadow-lg shadow-purple-500/20 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 flex items-center gap-2"
+              className="px-5 py-2.5 rounded-xl font-bold text-sm disabled:opacity-50 flex items-center gap-2 btn-primary-sharp"
             >
               {processing ? (
                 <>

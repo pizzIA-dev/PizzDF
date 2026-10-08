@@ -1,5 +1,5 @@
-﻿import React, { useRef, useState } from 'react';
-import { UploadCloud, Sparkles } from 'lucide-react';
+﻿import React, { useEffect, useRef, useState } from 'react';
+import { takeStagedFiles } from '../../utils/stagedFiles';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 
 interface FileDropzoneProps {
@@ -21,6 +21,14 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const staged = takeStagedFiles();
+    if (staged && staged.length > 0) {
+      onFilesSelected(multiple ? staged : [staged[0]]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -117,17 +125,14 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto space-y-4">
+    <div className="w-full max-w-2xl mx-auto space-y-4">
       <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={() => inputRef.current?.click()}
-        className={`relative border-2 faceted-cut p-10 sm:p-14 text-center cursor-pointer transition-all duration-300 ${
-          isDragging
-            ? 'border-amber-400 bg-amber-500/15 scale-[1.01] shadow-[0_0_30px_rgba(245,158,11,0.5)]'
-            : 'border-slate-300/90 bg-white hover:bg-amber-50/20 hover:border-amber-400 hover:shadow-md shadow-sm'
-        }`}
+        className="drop-area bg-white p-10 sm:p-14 cursor-pointer"
+        data-over={isDragging}
       >
         <input
           ref={inputRef}
@@ -138,38 +143,28 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
           className="hidden"
         />
 
-        <div className="flex flex-col items-center justify-center space-y-4">
-          <div className="w-16 h-16 bg-amber-50 border border-amber-300 faceted-cut flex items-center justify-center shadow-md">
-            <UploadCloud className="w-8 h-8 text-amber-500" />
+        <div className="flex flex-col items-start gap-5">
+          <div className="space-y-2">
+            <h3 className="font-serif text-2xl sm:text-3xl leading-tight text-slate-900">{title}</h3>
+            <p className="text-sm text-slate-600 max-w-[48ch]">{subtitle}</p>
           </div>
-
-          <div className="space-y-1">
-            <h3 className="text-xl sm:text-2xl font-black text-slate-900">{title}</h3>
-            <p className="text-xs sm:text-sm text-slate-600 font-medium">{subtitle}</p>
-          </div>
-
-          <div className="pt-2">
-            <button
-              type="button"
-              className="btn-primary-sharp px-8 py-3 text-xs"
-            >
-              Seleccionar Archivo{multiple ? 's' : ''}
-            </button>
-          </div>
+          <button type="button" className="btn-primary-sharp px-6 py-2.5 text-sm">
+            Elegir archivo{multiple ? 's' : ''}
+          </button>
         </div>
       </div>
 
       {allowSample && accept.includes('pdf') && (
-        <div className="flex items-center justify-center gap-2 pt-1">
+        <p className="text-sm text-slate-600">
+          ¿No tienes un PDF a mano?{' '}
           <button
             type="button"
             onClick={createSamplePdf}
-            className="btn-secondary-sharp px-4 py-2 text-xs flex items-center gap-2 text-amber-700 hover:text-slate-950 hover:bg-slate-100"
+            className="underline underline-offset-4 text-slate-900 hover:text-[var(--tomato)] cursor-pointer"
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>¿No tienes un PDF a mano? Cargar documento de prueba</span>
+            Prueba con un documento de ejemplo
           </button>
-        </div>
+        </p>
       )}
     </div>
   );

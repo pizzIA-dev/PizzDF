@@ -1,18 +1,6 @@
-﻿import React from 'react';
-import { 
-  Pizza, 
-  Layers, 
-  FileEdit, 
-  Files, 
-  Scissors, 
-  Minimize2, 
-  LayoutGrid,
-  ShieldCheck,
-  Coffee,
-  Heart,
-  Zap
-} from 'lucide-react';
+import React from 'react';
 import type { ToolId } from '../types';
+import { TOOLS, BrandMark } from './toolCatalog';
 
 interface HeaderProps {
   currentTool: ToolId;
@@ -21,95 +9,62 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ currentTool, onSelectTool, onOpenDonation }) => {
+  const inTool = currentTool !== 'dashboard';
+
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-slate-200/90 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20">
-          
-          {/* Logo & Brand (Clean, sharp visual) */}
-          <div 
-            onClick={() => onSelectTool('dashboard')}
-            className="flex items-center gap-3.5 cursor-pointer group select-none"
-          >
-            <div className="relative w-11 h-11 bg-gradient-to-tr from-amber-500 via-amber-400 to-orange-500 p-[2px] faceted-cut shadow-[0_0_15px_rgba(245,158,11,0.4)] group-hover:shadow-[0_0_25px_rgba(245,158,11,0.7)] transition-all duration-300">
-              <div className="w-full h-full bg-white flex items-center justify-center">
-                <Pizza className="w-6 h-6 text-amber-400 group-hover:rotate-12 transition-transform duration-300" />
-              </div>
-            </div>
+    <header className="sticky top-0 z-50 bg-[var(--desk)]/95 backdrop-blur border-b border-[var(--rule)]">
+      <div className="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between gap-6">
+        <button
+          type="button"
+          onClick={() => onSelectTool('dashboard')}
+          className="flex items-center gap-2.5 shrink-0 cursor-pointer"
+          aria-label="PizzDF, volver al inicio"
+        >
+          <BrandMark className="w-7 h-7" />
+          <span className="font-serif text-[1.65rem] leading-none text-slate-900 tracking-tight">PizzDF</span>
+        </button>
 
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-2xl font-black tracking-tight text-slate-900 font-sans">
-                  <span className="text-amber-400 font-black">P</span>izz<span className="text-amber-400 font-black">DF</span>
-                </span>
-                <span className="slanted-tab px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest bg-amber-500 text-slate-950 shadow-sm">
-                  <span className="slanted-tab-inner inline-block">PRO</span>
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-500 font-medium tracking-wide hidden sm:block">
-                Suite de PDF
-              </p>
-            </div>
-          </div>
-
-          {/* Quick Tool Navigation (Slanted faceted tabs) */}
-          <div className="hidden md:flex items-center gap-1.5 bg-slate-100/90 p-1.5 border border-slate-200 faceted-cut">
-            {[
-              { id: 'organize' as ToolId, label: 'Organizar', icon: Layers },
-              { id: 'editor' as ToolId, label: 'Editor', icon: FileEdit },
-              { id: 'merge' as ToolId, label: 'Unir', icon: Files },
-              { id: 'split' as ToolId, label: 'Dividir', icon: Scissors },
-              { id: 'compress' as ToolId, label: 'Comprimir', icon: Minimize2 },
-            ].map(({ id, label, icon: Icon }) => {
-              const active = currentTool === id;
+        {inTool && (
+          <nav aria-label="Herramientas" className="hidden md:flex items-stretch gap-6 overflow-x-auto h-full">
+            {TOOLS.map((t) => {
+              const active = currentTool === t.id;
               return (
                 <button
-                  key={id}
-                  onClick={() => onSelectTool(id)}
-                  className={`slanted-tab px-3.5 py-1.5 text-xs font-bold transition-all duration-200 ${
-                    active
-                      ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 shadow-md font-extrabold'
-                      : 'text-slate-700 hover:text-slate-950 hover:bg-white/80 border border-transparent hover:border-slate-200'
+                  key={t.id}
+                  type="button"
+                  onClick={() => onSelectTool(t.id)}
+                  aria-current={active ? 'page' : undefined}
+                  className={`relative whitespace-nowrap text-sm cursor-pointer transition-colors ${
+                    active ? 'text-slate-900 font-semibold' : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
-                  <span className="slanted-tab-inner flex items-center gap-1.5">
-                    <Icon className="w-3.5 h-3.5" />
-                    <span>{label}</span>
-                  </span>
+                  {t.short}
+                  {active && <span className="absolute left-0 right-0 bottom-0 h-[2px] bg-[var(--tomato)]" />}
                 </button>
               );
             })}
-          </div>
+          </nav>
+        )}
 
-          {/* Right badges & Navigation */}
-          <div className="flex items-center gap-3">
-            {onOpenDonation && (
-              <button
-                onClick={onOpenDonation}
-                className="px-3 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95"
-                title="Apoyar el proyecto PizzDF"
-              >
-                <Coffee className="w-3.5 h-3.5 text-amber-400" />
-                <span className="hidden sm:inline">Invítame un café</span>
-                <span className="sm:hidden">Donar</span>
-              </button>
-            )}
-            <div className="hidden lg:flex items-center gap-2 px-3 py-1 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold faceted-cut">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>100% En tu Navegador</span>
-            </div>
-
-            {currentTool !== 'dashboard' && (
-              <button
-                onClick={() => onSelectTool('dashboard')}
-                className="btn-secondary-sharp px-4 py-2 text-xs flex items-center gap-2"
-              >
-                <LayoutGrid className="w-3.5 h-3.5 text-amber-400" />
-                <span>Todas las Herramientas</span>
-              </button>
-            )}
-          </div>
-
+        <div className="flex items-center gap-5 shrink-0 text-sm">
+          {inTool && (
+            <button
+              type="button"
+              onClick={() => onSelectTool('dashboard')}
+              className="md:hidden text-slate-600 hover:text-slate-900 cursor-pointer"
+            >
+              Inicio
+            </button>
+          )}
+          {onOpenDonation && (
+            <button
+              type="button"
+              onClick={onOpenDonation}
+              className="text-slate-900 underline underline-offset-4 decoration-[var(--tomato)] decoration-2 hover:text-[var(--tomato)] cursor-pointer"
+            >
+              Invítame un café
+            </button>
+          )}
         </div>
       </div>
     </header>

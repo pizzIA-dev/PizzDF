@@ -152,7 +152,7 @@ export const MergeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           </button>
           <div>
             <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-              <Files className="w-6 h-6 text-emerald-400" />
+              <Files className="w-6 h-6 text-[var(--tomato)]" />
               Unir PDFs
             </h2>
             <p className="text-xs text-slate-600">
@@ -165,7 +165,7 @@ export const MergeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           <button
             onClick={handleMergeAndDownload}
             disabled={processing || items.length < 2}
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/20 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 flex items-center gap-2"
+            className="px-5 py-2.5 rounded-xl font-bold text-sm disabled:opacity-50 flex items-center gap-2 btn-primary-sharp"
           >
             {processing ? (
               <>
@@ -195,7 +195,7 @@ export const MergeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         <div className="space-y-4 pt-4">
           <div className="flex items-center justify-between text-xs text-slate-600 px-1 font-medium">
             <span>Orden de unión (los archivos se combinarán de arriba hacia abajo):</span>
-            <span className="text-emerald-400 font-bold">{items.length} archivos añadidos</span>
+            <span className="text-slate-900 font-semibold">{items.length} archivos añadidos</span>
           </div>
 
           <div className="space-y-2.5">

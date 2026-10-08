@@ -97,7 +97,7 @@ export const CompressTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           </button>
           <div>
             <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-              <Minimize2 className="w-6 h-6 text-rose-400" />
+              <Minimize2 className="w-6 h-6 text-[var(--tomato)]" />
               Comprimir PDF
             </h2>
             <p className="text-xs text-slate-600">
@@ -193,7 +193,7 @@ export const CompressTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               <button
                 onClick={handleCompress}
                 disabled={processing}
-                className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-400 hover:to-red-400 text-slate-900 font-bold text-base shadow-xl shadow-rose-500/20 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 inline-flex items-center gap-2"
+                className="px-8 py-3.5 rounded-2xl font-bold text-base disabled:opacity-50 inline-flex items-center gap-2 btn-primary-sharp"
               >
                 {processing ? (
                   <>
@@ -254,7 +254,7 @@ export const CompressTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
               <button
                 onClick={handleDownload}
-                className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-base shadow-xl shadow-emerald-500/20 transition-all hover:scale-105 active:scale-95 inline-flex items-center gap-2"
+                className="px-8 py-3.5 rounded-2xl font-bold text-base inline-flex items-center gap-2 btn-primary-sharp"
               >
                 <Download className="w-5 h-5" />
                 <span>Descargar PDF Comprimido</span>

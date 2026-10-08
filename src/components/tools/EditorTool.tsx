@@ -641,7 +641,7 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           </button>
           <div>
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2">
-              <FileEdit className="w-5 h-5 text-amber-400" />
+              <FileEdit className="w-5 h-5 text-[var(--tomato)]" />
               Editor de PDF
             </h2>
             <p className="text-xs text-slate-600">
@@ -1011,7 +1011,7 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             <div
               ref={scrollViewerRef}
               onScroll={handleScroll}
-              className="flex-1 bg-[#06080e] border border-white/10 rounded-2xl p-6 max-h-[calc(100vh-220px)] overflow-y-auto space-y-8 shadow-inner flex flex-col items-center"
+              className="flex-1 bg-slate-200 border border-slate-300 rounded-2xl p-6 max-h-[calc(100vh-220px)] overflow-y-auto space-y-8 shadow-inner flex flex-col items-center"
             >
               {Array.from({ length: numPages }).map((_, pageIdx) => (
                 <PDFPageView

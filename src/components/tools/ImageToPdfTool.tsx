@@ -125,7 +125,7 @@ export const ImageToPdfTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
           </button>
           <div>
             <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-              <FileSpreadsheet className="w-6 h-6 text-emerald-400" />
+              <FileSpreadsheet className="w-6 h-6 text-[var(--tomato)]" />
               Imágenes a PDF
             </h2>
             <p className="text-xs text-slate-600">
@@ -138,7 +138,7 @@ export const ImageToPdfTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
           <button
             onClick={handleConvert}
             disabled={processing}
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/20 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 flex items-center gap-2"
+            className="px-5 py-2.5 rounded-xl font-bold text-sm disabled:opacity-50 flex items-center gap-2 btn-primary-sharp"
           >
             {processing ? (
               <>
@@ -168,7 +168,7 @@ export const ImageToPdfTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
         <div className="space-y-4 pt-4">
           <div className="flex items-center justify-between text-xs text-slate-600">
             <span>Orden de las páginas en el PDF final:</span>
-            <span className="text-emerald-400 font-bold">{items.length} imágenes cargadas</span>
+            <span className="text-slate-900 font-semibold">{items.length} imágenes cargadas</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
