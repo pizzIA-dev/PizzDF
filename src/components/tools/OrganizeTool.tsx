@@ -11,10 +11,12 @@ import {
   Layers,
   ArrowUpDown,
   CheckSquare,
-  Square
+  Square,
+  Eye
 } from 'lucide-react';
 import { ToastNotification, type ToastMessage } from '../common/ToastNotification';
 import { FileDropzone } from '../common/FileDropzone';
+import { PagePreviewModal } from '../common/PagePreviewModal';
 import { pdfjsLib, renderPageThumbnail, organizePDF, downloadBlob, formatFileSize } from '../../utils/pdfHelper';
 
 interface PageItem {
@@ -42,6 +44,8 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   };
 
   const [fileBuffer, setFileBuffer] = useState<ArrayBuffer | null>(null);
+  const [pdfDocProxy, setPdfDocProxy] = useState<any | null>(null);
+  const [previewPageIndex, setPreviewPageIndex] = useState<number | null>(null);
   const [pages, setPages] = useState<PageItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [processing, setProcessing] = useState(false);
@@ -65,6 +69,7 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       setFileBuffer(buffer);
 
       const pdf = await pdfjsLib.getDocument({ data: buffer.slice(0) }).promise;
+      setPdfDocProxy(pdf);
       const numPages = pdf.numPages;
       const loadedPages: PageItem[] = [];
 
@@ -396,6 +401,8 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               onClick={() => {
                 setFile(null);
                 setFileBuffer(null);
+                setPdfDocProxy(null);
+                setPreviewPageIndex(null);
                 setPages([]);
               }}
               className="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 hover:text-slate-950 hover:bg-slate-50 shadow-sm transition flex items-center gap-1.5"
@@ -607,7 +614,22 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   </div>
 
                   {/* Thumbnail container */}
-                  <div className="relative p-3 flex items-center justify-center bg-slate-100/60 min-h-[170px] overflow-hidden">
+                  <div 
+                    onDoubleClick={(e) => { e.stopPropagation(); setPreviewPageIndex(index); }}
+                    className="relative p-3 flex items-center justify-center bg-slate-100/60 min-h-[170px] overflow-hidden cursor-pointer group/thumb"
+                  >
+                    {/* Quick Preview Hover Button */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setPreviewPageIndex(index);
+                      }}
+                      className="opacity-0 group-hover:opacity-100 p-2 rounded-xl bg-slate-900/80 hover:bg-slate-950 text-white shadow-lg backdrop-blur-xs transition-all absolute top-2 right-2 z-10 hover:scale-105"
+                      title="Ver página completa en alta resolución (Doble clic)"
+                    >
+                      <Eye className="w-3.5 h-3.5 text-amber-400" />
+                    </button>
                     <div
                       className="transition-transform duration-300 flex items-center justify-center"
                       style={{ transform: `rotate(${page.rotation}deg)` }}
@@ -648,6 +670,15 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
                     <button
                       type="button"
+                      onClick={(e) => { e.stopPropagation(); setPreviewPageIndex(index); }}
+                      title="Ver página completa en alta definición"
+                      className="p-1.5 rounded-lg hover:bg-amber-100 text-slate-600 hover:text-amber-700 transition"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                    </button>
+
+                    <button
+                      type="button"
                       onClick={(e) => { e.stopPropagation(); handleDuplicate(index); }}
                       title="Duplicar página"
                       className="p-1.5 rounded-lg hover:bg-slate-200/80 text-slate-600 hover:text-blue-600 transition"
@@ -671,6 +702,22 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           </div>
         </div>
       )}
+      {/* High-Definition Page Preview Modal */}
+      {previewPageIndex !== null && pdfDocProxy && (
+        <PagePreviewModal
+          isOpen={previewPageIndex !== null}
+          onClose={() => setPreviewPageIndex(null)}
+          pdfDoc={pdfDocProxy}
+          pageIndex={pages[previewPageIndex]?.originalIndex ?? previewPageIndex}
+          totalPages={pages.length}
+          rotation={pages[previewPageIndex]?.rotation ?? 0}
+          isSelected={selectedIds.has(pages[previewPageIndex]?.id)}
+          onToggleSelect={() => toggleSelectPage(pages[previewPageIndex].id)}
+          onRotate={(deg) => handleRotate(previewPageIndex, deg)}
+          onNavigate={(newIdx) => setPreviewPageIndex(newIdx)}
+        />
+      )}
+
       <ToastNotification toasts={toasts} onDismiss={removeToast} />
 </div>
   );
