@@ -82,11 +82,18 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectTool }) => {
     >
       <section className="sheet-wrap lg:sticky lg:top-24 sheet-in">
         <div className="sheet p-8 sm:p-11 min-h-[30rem] flex flex-col">
+          <div className="inline-flex items-center gap-2 self-start mb-4 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-xs font-bold text-amber-900 tracking-wide">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+            <span>100% Gratis e ilimitado</span>
+            <span className="text-amber-400">•</span>
+            <span>Sin servidores</span>
+          </div>
+
           <h1 className="text-[2.6rem] sm:text-5xl leading-[1.04] text-slate-900 max-w-[11ch] sm:max-w-none">
             Tu PDF no sale de tu computadora.
           </h1>
           <p className="mt-5 text-[15px] leading-relaxed text-slate-600 max-w-[34ch]">
-            Edítalo, únelo, divídelo o comprímelo aquí mismo. Todo ocurre en la memoria de tu navegador, sin cuentas y sin subir nada.
+            Edítalo, únelo, divídelo o comprímelo gratis y sin límites aquí mismo. Todo ocurre en la memoria de tu navegador, sin cuentas y sin subir nada.
           </p>
 
           <div className="mt-auto pt-10">
