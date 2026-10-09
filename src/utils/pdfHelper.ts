@@ -174,16 +174,18 @@ export async function addWatermark(
 
   for (const page of pages) {
     const { width, height } = page.getSize();
+    const rot = (page.getRotation().angle % 360 + 360) % 360;
+    const totalAngle = (angle + rot) % 360;
     const textWidth = font.widthOfTextAtSize(text, size);
     const textHeight = font.heightAtSize(size);
 
     page.drawText(text, {
-      x: width / 2 - (textWidth / 2) * Math.cos((angle * Math.PI) / 180),
-      y: height / 2 - (textHeight / 2) * Math.sin((angle * Math.PI) / 180),
+      x: width / 2 - (textWidth / 2) * Math.cos((totalAngle * Math.PI) / 180),
+      y: height / 2 - (textHeight / 2) * Math.sin((totalAngle * Math.PI) / 180),
       size,
       font,
       color: rgb(r, g, b),
-      rotate: degrees(angle),
+      rotate: degrees(totalAngle),
       opacity,
     });
   }
@@ -217,28 +219,54 @@ export async function addPageNumbers(
       text = `Folio: ${String(pageNum).padStart(4, '0')}`;
     }
 
-    const { width, height } = page.getSize();
+    const { width: pWidth, height: pHeight } = page.getSize();
+    const rot = (page.getRotation().angle % 360 + 360) % 360;
+    const isPerpendicular = rot === 90 || rot === 270;
+    const vWidth = isPerpendicular ? pHeight : pWidth;
+    const vHeight = isPerpendicular ? pWidth : pHeight;
+
     const textWidth = font.widthOfTextAtSize(text, fontSize);
-    let x = width / 2 - textWidth / 2;
-    let y = 20;
+    let vx = vWidth / 2 - textWidth / 2;
+    let vy = vHeight - 25;
 
     if (options.position === 'bottom-right') {
-      x = width - textWidth - 30;
-      y = 20;
+      vx = vWidth - textWidth - 30;
+      vy = vHeight - 25;
     } else if (options.position === 'bottom-left') {
-      x = 30;
-      y = 20;
+      vx = 30;
+      vy = vHeight - 25;
     } else if (options.position === 'top-right') {
-      x = width - textWidth - 30;
-      y = height - 30;
+      vx = vWidth - textWidth - 30;
+      vy = 25;
+    }
+
+    let pdfX: number;
+    let pdfY: number;
+
+    if (rot === 0) {
+      pdfX = vx;
+      pdfY = pHeight - vy - fontSize;
+    } else if (rot === 90) {
+      pdfX = vy + fontSize;
+      pdfY = vx;
+    } else if (rot === 180) {
+      pdfX = pWidth - vx;
+      pdfY = vy + fontSize;
+    } else if (rot === 270) {
+      pdfX = pWidth - vy - fontSize;
+      pdfY = pHeight - vx;
+    } else {
+      pdfX = vx;
+      pdfY = pHeight - vy - fontSize;
     }
 
     page.drawText(text, {
-      x,
-      y,
+      x: pdfX,
+      y: pdfY,
       size: fontSize,
       font,
       color: rgb(0.3, 0.3, 0.3),
+      rotate: degrees(rot),
     });
   });
 

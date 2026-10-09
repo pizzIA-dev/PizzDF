@@ -29,7 +29,7 @@ import { ClearAnnotationsModal } from '../common/ClearAnnotationsModal';
 import { ToastNotification, type ToastMessage } from '../common/ToastNotification';
 import { PDFPageView } from './PDFPageView';
 import { pdfjsLib, renderPageThumbnail, downloadBlob } from '../../utils/pdfHelper';
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import { PDFDocument, rgb, StandardFonts, degrees } from 'pdf-lib';
 
 export type ActiveTool = 'select' | 'text' | 'draw' | 'highlight' | 'table' | 'stamp';
 
@@ -354,6 +354,58 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     }
   };
 
+/**
+ * Calculates exact placement in unrotated PDF coordinate space
+ * for annotations drawn in screen space, accounting for page rotation (0, 90, 180, 270).
+ */
+function getAnnotationPlacement(
+  pageWidth: number,
+  pageHeight: number,
+  rotationAngle: number,
+  normX: number,
+  normY: number,
+  normW: number,
+  normH: number
+) {
+  const rot = (rotationAngle % 360 + 360) % 360;
+  const isPerpendicular = rot === 90 || rot === 270;
+  const vWidth = isPerpendicular ? pageHeight : pageWidth;
+  const vHeight = isPerpendicular ? pageWidth : pageHeight;
+
+  const vx = normX * vWidth;
+  const vy = normY * vHeight;
+  const vw = Math.max(1, (normW || 0.25) * vWidth);
+  const vh = Math.max(1, (normH || 0.1) * vHeight);
+
+  let x: number;
+  let y: number;
+
+  if (rot === 0) {
+    x = vx;
+    y = pageHeight - (vy + vh);
+  } else if (rot === 90) {
+    x = vy + vh;
+    y = vx;
+  } else if (rot === 180) {
+    x = pageWidth - vx;
+    y = vy + vh;
+  } else if (rot === 270) {
+    x = pageWidth - (vy + vh);
+    y = pageHeight - vx;
+  } else {
+    x = vx;
+    y = pageHeight - (vy + vh);
+  }
+
+  return {
+    x,
+    y,
+    width: vw,
+    height: vh,
+    rotateAngle: rot,
+  };
+}
+
   // Export PDF with annotations embedded using pdf-lib
   const handleExportPDF = async () => {
     if (!fileBuffer) {
@@ -377,12 +429,25 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         if (ann.pageIndex < 0 || ann.pageIndex >= pages.length) continue;
         const page = pages[ann.pageIndex];
         const { width: pWidth, height: pHeight } = page.getSize();
+        const rot = page.getRotation().angle;
 
-        // Convert normalized (0..1) coordinates into exact PDF points (origin at bottom-left in PDF)
-        const pdfX = ann.x * pWidth;
-        const pdfY = pHeight - (ann.y * pHeight);
-        const pdfW = (ann.width || 0.25) * pWidth;
-        const pdfH = (ann.height || 0.1) * pHeight;
+        const placement = getAnnotationPlacement(
+          pWidth,
+          pHeight,
+          rot,
+          ann.x,
+          ann.y,
+          ann.width || 0.25,
+          ann.height || 0.1
+        );
+        const { width: pdfW, height: pdfH } = placement;
+        const imagePlacement = {
+          x: placement.x,
+          y: placement.y,
+          width: placement.width,
+          height: placement.height,
+          rotate: degrees(placement.rotateAngle),
+        };
 
         try {
           if (ann.type === 'text' && ann.text && ann.text.trim()) {
@@ -423,12 +488,7 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               const textBytes = await textRes.arrayBuffer();
               const textPng = await pdfDoc.embedPng(textBytes);
 
-              page.drawImage(textPng, {
-                x: pdfX,
-                y: pdfY - pdfH,
-                width: pdfW,
-                height: pdfH,
-              });
+              page.drawImage(textPng, imagePlacement);
             }
           } else if ((ann.type === 'signature' || ann.type === 'image') && ann.imageData) {
             try {
@@ -452,12 +512,7 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 const pngBytes = await pngRes.arrayBuffer();
                 const embeddedImg = await pdfDoc.embedPng(pngBytes);
 
-                page.drawImage(embeddedImg, {
-                  x: pdfX,
-                  y: pdfY - pdfH,
-                  width: pdfW,
-                  height: pdfH,
-                });
+                page.drawImage(embeddedImg, imagePlacement);
               }
             } catch (imgErr) {
               console.warn('Could not embed image/signature annotation:', imgErr);
@@ -490,11 +545,8 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               const highPng = await pdfDoc.embedPng(highBytes);
 
               page.drawImage(highPng, {
-                x: pdfX,
-                y: pdfY - pdfH,
-                width: pdfW,
-                height: pdfH,
-                opacity: 0.38,
+                ...imagePlacement,
+                opacity: ann.opacity ?? 0.38,
               });
             }
           } else if (ann.type === 'draw' && ann.points && ann.points.length > 0) {
@@ -524,12 +576,7 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               const drawBytes = await drawRes.arrayBuffer();
               const drawPng = await pdfDoc.embedPng(drawBytes);
 
-              page.drawImage(drawPng, {
-                x: pdfX,
-                y: pdfY - pdfH,
-                width: pdfW,
-                height: pdfH,
-              });
+              page.drawImage(drawPng, imagePlacement);
             }
           } else if (ann.type === 'stamp') {
             // High-fidelity Authentic Ink Stamp (100% WYSIWYG matching preview)
@@ -549,52 +596,53 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               const stampBytes = await stampRes.arrayBuffer();
               const stampPng = await pdfDoc.embedPng(stampBytes);
 
-              page.drawImage(stampPng, {
-                x: pdfX,
-                y: pdfY - pdfH,
-                width: pdfW,
-                height: pdfH,
-              });
+              page.drawImage(stampPng, imagePlacement);
             }
           } else if (ann.type === 'table' && ann.tableData && ann.tableData.cells) {
             const cells = ann.tableData.cells;
             const rows = cells.length;
             const cols = cells[0]?.length || 1;
-            const cellW = pdfW / cols;
-            const cellH = pdfH / Math.max(1, rows);
+            const dpr = 3;
+            const cW = Math.max(100, Math.round(pdfW * dpr));
+            const cH = Math.max(60, Math.round(pdfH * dpr));
+            const tableCanvas = document.createElement('canvas');
+            tableCanvas.width = cW;
+            tableCanvas.height = cH;
+            const tCtx = tableCanvas.getContext('2d');
+            if (tCtx) {
+              const cellW = cW / cols;
+              const cellH = cH / Math.max(1, rows);
+              const borderColor = ann.tableData.borderColor || '#94a3b8';
 
-            const hexBorder = (ann.tableData.borderColor || '#94a3b8').replace('#', '');
-            const br = parseInt(hexBorder.substring(0, 2), 16) / 255 || 0.6;
-            const bg = parseInt(hexBorder.substring(2, 4), 16) / 255 || 0.6;
-            const bb = parseInt(hexBorder.substring(4, 6), 16) / 255 || 0.6;
+              for (let rIdx = 0; rIdx < rows; rIdx++) {
+                for (let cIdx = 0; cIdx < cols; cIdx++) {
+                  const cx = cIdx * cellW;
+                  const cy = rIdx * cellH;
 
-            for (let rIdx = 0; rIdx < rows; rIdx++) {
-              for (let cIdx = 0; cIdx < cols; cIdx++) {
-                const cellX = pdfX + cIdx * cellW;
-                const cellY = pdfY - (rIdx + 1) * cellH;
+                  tCtx.fillStyle = rIdx === 0 ? '#1e293b' : '#ffffff';
+                  tCtx.fillRect(cx, cy, cellW, cellH);
 
-                page.drawRectangle({
-                  x: cellX,
-                  y: cellY,
-                  width: cellW,
-                  height: cellH,
-                  borderColor: rgb(br, bg, bb),
-                  borderWidth: 1,
-                  color: rIdx === 0 ? rgb(0.1, 0.15, 0.25) : rgb(1, 1, 1),
-                });
+                  tCtx.strokeStyle = borderColor;
+                  tCtx.lineWidth = 1 * dpr;
+                  tCtx.strokeRect(cx, cy, cellW, cellH);
 
-                const textStr = (cells[rIdx]?.[cIdx] || '').replace(/[^\x20-\x7E\xA0-\xFF]/g, ' ');
-                if (textStr) {
-                  const fontSize = Math.min(10, Math.max(6, cellH * 0.4));
-                  page.drawText(textStr, {
-                    x: cellX + 4,
-                    y: cellY + cellH / 2 - fontSize / 2,
-                    size: fontSize,
-                    font: rIdx === 0 ? helveticaBold : helvetica,
-                    color: rIdx === 0 ? rgb(1, 1, 1) : rgb(0.1, 0.1, 0.1),
-                  });
+                  const textStr = cells[rIdx]?.[cIdx] || '';
+                  if (textStr) {
+                    const fontSize = Math.min(12 * dpr, Math.max(7 * dpr, cellH * 0.45));
+                    tCtx.font = `${rIdx === 0 ? 'bold' : 'normal'} ${fontSize}px Inter, Arial, sans-serif`;
+                    tCtx.fillStyle = rIdx === 0 ? '#ffffff' : '#0f172a';
+                    tCtx.textBaseline = 'middle';
+                    tCtx.fillText(textStr, cx + 4 * dpr, cy + cellH / 2);
+                  }
                 }
               }
+
+              const tablePngUrl = tableCanvas.toDataURL('image/png');
+              const tableRes = await fetch(tablePngUrl);
+              const tableBytes = await tableRes.arrayBuffer();
+              const tablePng = await pdfDoc.embedPng(tableBytes);
+
+              page.drawImage(tablePng, imagePlacement);
             }
           }
         } catch (itemErr) {
