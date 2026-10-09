@@ -13,11 +13,7 @@ import {
   Columns,
   Rows,
   Copy,
-  GripHorizontal,
-  RotateCw,
-  Eraser,
-  Type,
-  Palette
+  GripHorizontal
 } from 'lucide-react';
 import type { PageAnnotation, TableData } from './EditorTool';
 
@@ -87,27 +83,6 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
   const [draggingAnnId, setDraggingAnnId] = useState<string | null>(null);
   const [dragStartPos, setDragStartPos] = useState<{ clientX: number; clientY: number }>({ clientX: 0, clientY: 0 });
 
-  // Free rotation state
-  const [rotatingAnnId, setRotatingAnnId] = useState<string | null>(null);
-  const [rotateCenter, setRotateCenter] = useState<{ cx: number; cy: number }>({ cx: 0, cy: 0 });
-
-  // Whiteout drawing creation state
-  const [isDrawingWhiteout, setIsDrawingWhiteout] = useState(false);
-  const [whiteoutStart, setWhiteoutStart] = useState<{ relX: number; relY: number }>({ relX: 0, relY: 0 });
-  const [whiteoutCurrent, setWhiteoutCurrent] = useState<{ relX: number; relY: number }>({ relX: 0, relY: 0 });
-
-  // Smart Native Text detection state
-  const [nativeTextItems, setNativeTextItems] = useState<Array<{
-    id: string;
-    str: string;
-    normX: number;
-    normY: number;
-    normW: number;
-    normH: number;
-    fontSize: number;
-    rotation: number;
-  }>>([]);
-
   // Resizing state
   const [resizingAnnId, setResizingAnnId] = useState<string | null>(null);
   const [resizeHandle, setResizeHandle] = useState<'se' | 'sw' | 'ne' | 'nw'>('se');
@@ -142,35 +117,6 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
         if (highlightCanvasRef.current) {
           highlightCanvasRef.current.width = viewport.width;
           highlightCanvasRef.current.height = viewport.height;
-        }
-
-        // Extract native text items for Smart Click-to-Edit
-        try {
-          const textContent = await page.getTextContent();
-          const items: any[] = [];
-          textContent.items.forEach((item: any, idx: number) => {
-            if (!item.str || !item.str.trim()) return;
-            const [a, b, c, d, e, f] = item.transform;
-            const fontSize = Math.round(Math.hypot(a, b));
-            const angle = Math.round(Math.atan2(b, a) * (180 / Math.PI));
-            const ptTop = viewport.convertToViewportPoint(e, f + fontSize);
-            const wPx = item.width * scale;
-            const hPx = Math.max(14 * scale, fontSize * 1.25 * scale);
-
-            items.push({
-              id: `text-${pageNumber}-${idx}`,
-              str: item.str,
-              normX: Math.max(0, ptTop[0] / viewport.width),
-              normY: Math.max(0, ptTop[1] / viewport.height),
-              normW: Math.min(1, Math.max(0.015, (wPx + 4) / viewport.width)),
-              normH: Math.min(1, Math.max(0.012, hPx / viewport.height)),
-              fontSize: Math.max(9, fontSize),
-              rotation: -angle,
-            });
-          });
-          setNativeTextItems(items);
-        } catch (tErr) {
-          console.warn(`Could not extract text content for page ${pageNumber}:`, tErr);
         }
       } catch (err) {
         console.error(`Error rendering page ${pageNumber}:`, err);
@@ -234,13 +180,6 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
       };
       onAddAnnotation(newStampAnn);
       onSelectAnn(newStampAnn.id);
-      return;
-    }
-
-    if (activeTool === 'whiteout') {
-      setIsDrawingWhiteout(true);
-      setWhiteoutStart({ relX, relY });
-      setWhiteoutCurrent({ relX, relY });
       return;
     }
 
@@ -313,12 +252,6 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
       const { x, y } = getCanvasCoords(e);
       setCursorPos({ x, y, visible: true });
     }
-    if (isDrawingWhiteout) {
-      const { relX, relY } = getCanvasCoords(e);
-      setWhiteoutCurrent({ relX, relY });
-      return;
-    }
-
     if (!isDrawing) return;
     const { x, y } = getCanvasCoords(e);
 
@@ -358,33 +291,6 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
   };
 
   const handlePageMouseUp = () => {
-    if (isDrawingWhiteout) {
-      setIsDrawingWhiteout(false);
-      const minX = Math.min(whiteoutStart.relX, whiteoutCurrent.relX);
-      const minY = Math.min(whiteoutStart.relY, whiteoutCurrent.relY);
-      let w = Math.abs(whiteoutCurrent.relX - whiteoutStart.relX);
-      let h = Math.abs(whiteoutCurrent.relY - whiteoutStart.relY);
-      if (w < 0.02 || h < 0.015) {
-        w = 0.25;
-        h = 0.05;
-      }
-      const newWhiteoutAnn: PageAnnotation = {
-        id: `ann-${Date.now()}-${Math.random()}`,
-        type: 'whiteout',
-        pageIndex: pageNumber - 1,
-        x: minX,
-        y: minY,
-        width: w,
-        height: h,
-        zIndex: 25,
-        backgroundColor: '#ffffff',
-        rotation: 0,
-      };
-      onAddAnnotation(newWhiteoutAnn);
-      onSelectAnn(newWhiteoutAnn.id);
-      return;
-    }
-
     if (isDrawing && currentPoints.length > 1) {
       // Compute precise bounding box for draw or highlight
       let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
@@ -495,26 +401,15 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
           width: newPixelW / pageDims.width,
           height: newPixelH / pageDims.height,
         });
-      } else if (rotatingAnnId) {
-        const target = annotations.find(a => a.id === rotatingAnnId);
-        if (!target) return;
-        const rad = Math.atan2(e.clientY - rotateCenter.cy, e.clientX - rotateCenter.cx);
-        let deg = Math.round(((rad * 180) / Math.PI) + 90);
-        deg = ((deg % 360) + 360) % 360;
-        if (e.shiftKey) {
-          deg = (Math.round(deg / 15) * 15) % 360;
-        }
-        onUpdateAnn({ ...target, rotation: deg });
       }
     };
 
     const handleWindowMouseUp = () => {
       setDraggingAnnId(null);
       setResizingAnnId(null);
-      setRotatingAnnId(null);
     };
 
-    if (draggingAnnId || resizingAnnId || rotatingAnnId) {
+    if (draggingAnnId || resizingAnnId) {
       window.addEventListener('mousemove', handleWindowMouseMove);
       window.addEventListener('mouseup', handleWindowMouseUp);
     }
@@ -522,20 +417,7 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
       window.removeEventListener('mousemove', handleWindowMouseMove);
       window.removeEventListener('mouseup', handleWindowMouseUp);
     };
-  }, [draggingAnnId, resizingAnnId, rotatingAnnId, rotateCenter, dragStartPos, resizeStart, annotations, pageDims]);
-
-  // Free rotation handler
-  const handleStartRotate = (ann: PageAnnotation, e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    const frame = pageFrameRef.current;
-    if (!frame) return;
-    const rect = frame.getBoundingClientRect();
-    const cx = rect.left + (ann.x + (ann.width || 0.25) / 2) * pageDims.width;
-    const cy = rect.top + (ann.y + (ann.height || 0.1) / 2) * pageDims.height;
-    setRotatingAnnId(ann.id);
-    setRotateCenter({ cx, cy });
-  };
+  }, [draggingAnnId, resizingAnnId, dragStartPos, resizeStart, annotations, pageDims]);
 
   // Layering
   const handleBringToFront = (ann: PageAnnotation) => {
@@ -636,7 +518,7 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
       <div
         ref={pageFrameRef}
         className={`relative shadow-2xl border border-slate-700/80 bg-white ${
-          activeTool === 'draw' || activeTool === 'highlight' ? 'cursor-none' : activeTool === 'whiteout' ? 'cursor-crosshair' : ''
+          activeTool === 'draw' || activeTool === 'highlight' ? 'cursor-none' : ''
         }`}
         style={{ width: `${pageDims.width}px`, height: `${pageDims.height}px` }}
         onMouseDown={handlePageMouseDown}
@@ -663,67 +545,6 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
 
         {/* PDF Background Canvas */}
         <canvas ref={canvasRef} className="block bg-white" />
-
-        {/* Whiteout Dragging Live Preview */}
-        {isDrawingWhiteout && (
-          <div
-            className="absolute pointer-events-none z-40 border-2 border-amber-500 bg-white/80 shadow-md"
-            style={{
-              left: `${Math.min(whiteoutStart.relX, whiteoutCurrent.relX) * pageDims.width}px`,
-              top: `${Math.min(whiteoutStart.relY, whiteoutCurrent.relY) * pageDims.height}px`,
-              width: `${Math.abs(whiteoutCurrent.relX - whiteoutStart.relX) * pageDims.width}px`,
-              height: `${Math.abs(whiteoutCurrent.relY - whiteoutStart.relY) * pageDims.height}px`,
-            }}
-          />
-        )}
-
-        {/* Smart Native Text Click-to-Edit Layer */}
-        {activeTool === 'native-text' && nativeTextItems.map(item => {
-          const leftPx = item.normX * pageDims.width;
-          const topPx = item.normY * pageDims.height;
-          const widthPx = item.normW * pageDims.width;
-          const heightPx = item.normH * pageDims.height;
-
-          return (
-            <div
-              key={item.id}
-              onClick={e => {
-                e.stopPropagation();
-                const newAnn: PageAnnotation = {
-                  id: `ann-${Date.now()}-${Math.random()}`,
-                  type: 'whiteout',
-                  pageIndex: pageNumber - 1,
-                  x: item.normX,
-                  y: item.normY,
-                  width: Math.max(item.normW, 0.05),
-                  height: Math.max(item.normH, 0.025),
-                  zIndex: 30,
-                  backgroundColor: '#ffffff',
-                  text: item.str,
-                  fontSize: item.fontSize,
-                  color: '#0f172a',
-                  rotation: item.rotation,
-                };
-                onAddAnnotation(newAnn);
-                onSelectAnn(newAnn.id);
-              }}
-              className="absolute border border-dashed border-amber-500 bg-amber-400/15 hover:bg-amber-400/35 hover:border-amber-600 rounded-xs cursor-pointer z-35 group/native transition-all"
-              style={{
-                left: `${leftPx}px`,
-                top: `${topPx}px`,
-                width: `${widthPx}px`,
-                height: `${heightPx}px`,
-                transform: `rotate(${item.rotation}deg)`,
-                transformOrigin: 'top left',
-              }}
-              title={`Clic para editar: "${item.str}"`}
-            >
-              <div className="opacity-0 group-hover/native:opacity-100 absolute -top-5 left-0 bg-slate-900 text-amber-300 text-[9px] font-bold px-1.5 py-0.5 rounded shadow pointer-events-none whitespace-nowrap z-50">
-                Editar: {item.str.length > 25 ? item.str.slice(0, 25) + '...' : item.str}
-              </div>
-            </div>
-          );
-        })}
 
         {/* Live Drawing / Highlighting Preview SVG */}
         {isDrawing && currentPoints.length > 1 && (
@@ -826,116 +647,6 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
                   >
                     <Copy className="w-3.5 h-3.5" />
                   </button>
-
-                  {/* Rotation Indicator & Adjustment */}
-                  <div className="flex items-center gap-0.5 px-1 bg-slate-100 rounded border border-slate-200" title="Ángulo de rotación">
-                    <RotateCw className="w-2.5 h-2.5 text-slate-500" />
-                    <input
-                      type="number"
-                      min="-360"
-                      max="360"
-                      value={Math.round(ann.rotation || 0)}
-                      onChange={e => onUpdateAnn({ ...ann, rotation: ((Number(e.target.value) % 360) + 360) % 360 })}
-                      className="w-7 bg-transparent text-center text-[10px] font-mono font-bold text-slate-800 focus:outline-none"
-                    />
-                    <span className="text-[9px] text-slate-400">°</span>
-                  </div>
-                  {(ann.rotation || 0) !== 0 && (
-                    <button
-                      onClick={() => onUpdateAnn({ ...ann, rotation: 0 })}
-                      className="px-1 py-0.5 hover:bg-slate-100 rounded text-[10px] font-mono text-slate-600 hover:text-amber-600"
-                      title="Restablecer rotación a 0°"
-                    >
-                      0°
-                    </button>
-                  )}
-
-                                    {/* Whiteout / Corrector Properties */}
-                  {ann.type === 'whiteout' && (
-                    <div className="flex items-center gap-1">
-                      <div className="flex items-center gap-1 pl-1">
-                        <span className="text-[10px] text-slate-400 font-medium">Fondo:</span>
-                        <label className="flex items-center p-0.5 hover:bg-slate-100 rounded cursor-pointer" title="Color de fondo del parche">
-                          <input
-                            type="color"
-                            value={ann.backgroundColor || '#ffffff'}
-                            onChange={e => onUpdateAnn({ ...ann, backgroundColor: e.target.value })}
-                            className="w-4 h-4 rounded cursor-pointer border-0 bg-transparent"
-                          />
-                        </label>
-                      </div>
-
-                      {ann.text === undefined ? (
-                        <button
-                          onClick={() => onUpdateAnn({ ...ann, text: 'Texto de reemplazo', fontSize: 16, color: '#0f172a' })}
-                          className="px-2 py-0.5 bg-amber-400 text-slate-950 rounded text-[10px] font-bold hover:bg-amber-500 transition flex items-center gap-1"
-                        >
-                          <Type className="w-2.5 h-2.5" />
-                          <span>Escribir texto</span>
-                        </button>
-                      ) : (
-                        <>
-                          <select
-                            value={ann.fontFamily || "'Inter', sans-serif"}
-                            onChange={e => onUpdateAnn({ ...ann, fontFamily: e.target.value })}
-                            className="bg-slate-100 border border-slate-200 rounded px-1.5 py-0.5 text-[10px] text-slate-800 focus:outline-none"
-                          >
-                            {FONT_OPTIONS.map(f => (
-                              <option key={f.value} value={f.value}>{f.label}</option>
-                            ))}
-                          </select>
-                          <div className="flex items-center gap-0.5 px-1 bg-slate-100 rounded border border-slate-200">
-                            <input
-                              type="number"
-                              min="8"
-                              max="96"
-                              value={ann.fontSize || 16}
-                              onChange={e => onUpdateAnn({ ...ann, fontSize: Number(e.target.value) })}
-                              className="w-7 bg-transparent text-center text-[10px] font-mono font-bold text-slate-800 focus:outline-none"
-                            />
-                            <span className="text-[9px] text-slate-400">pt</span>
-                          </div>
-                          <div className="flex items-center gap-0.5">
-                            <button
-                              onClick={() => onUpdateAnn({ ...ann, isBold: !ann.isBold })}
-                              className={`p-1 rounded text-xs font-black ${
-                                ann.isBold ? 'bg-amber-400 text-slate-950' : 'text-slate-600 hover:bg-slate-100'
-                              }`}
-                              title="Negrita"
-                            >
-                              <Bold className="w-2.5 h-2.5" />
-                            </button>
-                            <button
-                              onClick={() => onUpdateAnn({ ...ann, isItalic: !ann.isItalic })}
-                              className={`p-1 rounded text-xs font-black ${
-                                ann.isItalic ? 'bg-amber-400 text-slate-950' : 'text-slate-600 hover:bg-slate-100'
-                              }`}
-                              title="Cursiva"
-                            >
-                              <Italic className="w-2.5 h-2.5" />
-                            </button>
-                            <button
-                              onClick={() => onUpdateAnn({ ...ann, isUnderline: !ann.isUnderline })}
-                              className={`p-1 rounded text-xs font-black ${
-                                ann.isUnderline ? 'bg-amber-400 text-slate-950' : 'text-slate-600 hover:bg-slate-100'
-                              }`}
-                              title="Subrayado"
-                            >
-                              <Underline className="w-2.5 h-2.5" />
-                            </button>
-                            <label className="flex items-center p-0.5 hover:bg-slate-100 rounded cursor-pointer" title="Color de texto">
-                              <input
-                                type="color"
-                                value={ann.color || '#0f172a'}
-                                onChange={e => onUpdateAnn({ ...ann, color: e.target.value })}
-                                className="w-4 h-4 rounded cursor-pointer border-0 bg-transparent"
-                              />
-                            </label>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  )}
 
                   {/* Text Properties */}
                   {ann.type === 'text' && (
@@ -1104,43 +815,6 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
               )}
 
               {/* Element Bodies */}
-                            {/* Whiteout / Corrector Body */}
-              {ann.type === 'whiteout' && (
-                <div
-                  className="w-full h-full relative overflow-hidden flex flex-col justify-center"
-                  style={{
-                    backgroundColor: ann.backgroundColor || '#ffffff',
-                    border: isSelected ? 'none' : '1px dashed rgba(148, 163, 184, 0.45)',
-                  }}
-                >
-                  {ann.text !== undefined ? (
-                    <textarea
-                      value={ann.text ?? ''}
-                      placeholder="Escribe el texto de reemplazo..."
-                      rows={Math.max(1, (ann.text || '').split('\n').length)}
-                      onChange={e => onUpdateAnn({ ...ann, text: e.target.value })}
-                      onMouseDown={e => e.stopPropagation()}
-                      className="w-full h-full bg-transparent resize-none border-0 outline-none p-1 placeholder:text-slate-400 placeholder:italic cursor-text overflow-hidden"
-                      style={{
-                        fontFamily: ann.fontFamily || "'Inter', sans-serif",
-                        fontSize: `${(ann.fontSize || 16) * scale}px`,
-                        color: ann.color || '#0f172a',
-                        fontWeight: ann.isBold ? 'bold' : 'normal',
-                        fontStyle: ann.isItalic ? 'italic' : 'normal',
-                        textDecoration: ann.isUnderline ? 'underline' : 'none',
-                        lineHeight: '1.25',
-                      }}
-                    />
-                  ) : (
-                    isSelected && (
-                      <div className="w-full h-full flex items-center justify-center p-1">
-                        <span className="text-[10px] text-slate-400 font-mono">Corrector (vacío)</span>
-                      </div>
-                    )
-                  )}
-                </div>
-              )}
-
               {/* Word/PowerPoint style auto-expanding textarea */}
               {ann.type === 'text' && (
                 <textarea

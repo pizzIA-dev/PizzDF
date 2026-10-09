@@ -20,8 +20,7 @@ import {
   PanelLeftClose, 
   PanelLeft,
   Sliders,
-  Sparkles,
-  Eraser
+  Sparkles
 } from 'lucide-react';
 import { FileDropzone } from '../common/FileDropzone';
 import { SignatureModal } from '../common/SignatureModal';
@@ -32,7 +31,7 @@ import { PDFPageView } from './PDFPageView';
 import { pdfjsLib, renderPageThumbnail, downloadBlob } from '../../utils/pdfHelper';
 import { PDFDocument, rgb, StandardFonts, degrees } from 'pdf-lib';
 
-export type ActiveTool = 'select' | 'native-text' | 'whiteout' | 'text' | 'draw' | 'highlight' | 'table' | 'stamp';
+export type ActiveTool = 'select' | 'text' | 'draw' | 'highlight' | 'table' | 'stamp';
 
 export interface TableData {
   rows: number;
@@ -45,19 +44,17 @@ export interface TableData {
 
 export interface PageAnnotation {
   id: string;
-  type: 'text' | 'draw' | 'stamp' | 'image' | 'signature' | 'table' | 'highlight' | 'whiteout';
+  type: 'text' | 'draw' | 'stamp' | 'image' | 'signature' | 'table' | 'highlight';
   pageIndex: number;
   x: number;
   y: number;
   width: number;
   height: number;
   zIndex: number;
-  rotation?: number;
   text?: string;
   fontFamily?: string;
   fontSize?: number;
   color?: string;
-  backgroundColor?: string;
   isBold?: boolean;
   isItalic?: boolean;
   isUnderline?: boolean;
@@ -361,63 +358,51 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
  * Calculates exact placement in unrotated PDF coordinate space
  * for annotations drawn in screen space, accounting for page rotation (0, 90, 180, 270).
  */
-/**
- * Calculates exact placement and center-preserving rotation in unrotated PDF coordinate space
- * for annotations drawn in screen space, accounting for both page rotation (0, 90, 180, 270)
- * and custom element rotation (0 to 360 degrees).
- */
-function getRotatedAnnotationPlacement(
+function getAnnotationPlacement(
   pageWidth: number,
   pageHeight: number,
-  pageRotation: number,
+  rotationAngle: number,
   normX: number,
   normY: number,
   normW: number,
-  normH: number,
-  elementRotationDeg: number = 0
+  normH: number
 ) {
-  const rot = (pageRotation % 360 + 360) % 360;
+  const rot = (rotationAngle % 360 + 360) % 360;
   const isPerpendicular = rot === 90 || rot === 270;
   const vWidth = isPerpendicular ? pageHeight : pageWidth;
   const vHeight = isPerpendicular ? pageWidth : pageHeight;
 
+  const vx = normX * vWidth;
+  const vy = normY * vHeight;
   const vw = Math.max(1, (normW || 0.25) * vWidth);
   const vh = Math.max(1, (normH || 0.1) * vHeight);
 
-  const vcx = (normX + (normW || 0.25) / 2) * vWidth;
-  const vcy = (normY + (normH || 0.1) / 2) * vHeight;
-
-  let pcx: number;
-  let pcy: number;
+  let x: number;
+  let y: number;
 
   if (rot === 0) {
-    pcx = vcx;
-    pcy = pageHeight - vcy;
+    x = vx;
+    y = pageHeight - (vy + vh);
   } else if (rot === 90) {
-    pcx = vcy;
-    pcy = vcx;
+    x = vy + vh;
+    y = vx;
   } else if (rot === 180) {
-    pcx = pageWidth - vcx;
-    pcy = vcy;
+    x = pageWidth - vx;
+    y = vy + vh;
   } else if (rot === 270) {
-    pcx = pageWidth - vcy;
-    pcy = pageHeight - vcx;
+    x = pageWidth - (vy + vh);
+    y = pageHeight - vx;
   } else {
-    pcx = vcx;
-    pcy = pageHeight - vcy;
+    x = vx;
+    y = pageHeight - (vy + vh);
   }
 
-  const totalAngle = ((rot - elementRotationDeg) % 360 + 360) % 360;
-  const rad = (totalAngle * Math.PI) / 180;
-  const dx = (-vw / 2) * Math.cos(rad) - (-vh / 2) * Math.sin(rad);
-  const dy = (-vw / 2) * Math.sin(rad) + (-vh / 2) * Math.cos(rad);
-
   return {
-    x: pcx + dx,
-    y: pcy + dy,
+    x,
+    y,
     width: vw,
     height: vh,
-    rotateAngle: totalAngle,
+    rotateAngle: rot,
   };
 }
 
@@ -446,15 +431,14 @@ function getRotatedAnnotationPlacement(
         const { width: pWidth, height: pHeight } = page.getSize();
         const rot = page.getRotation().angle;
 
-        const placement = getRotatedAnnotationPlacement(
+        const placement = getAnnotationPlacement(
           pWidth,
           pHeight,
           rot,
           ann.x,
           ann.y,
           ann.width || 0.25,
-          ann.height || 0.1,
-          ann.rotation || 0
+          ann.height || 0.1
         );
         const { width: pdfW, height: pdfH } = placement;
         const imagePlacement = {
@@ -564,50 +548,6 @@ function getRotatedAnnotationPlacement(
                 ...imagePlacement,
                 opacity: ann.opacity ?? 0.38,
               });
-            }
-          } else if (ann.type === 'whiteout') {
-            // High-fidelity Whiteout / Corrector (clean background mask + optional replacement text)
-            const dpr = 3;
-            const cW = Math.max(40, Math.round(pdfW * dpr));
-            const cH = Math.max(20, Math.round(pdfH * dpr));
-            const wCanvas = document.createElement('canvas');
-            wCanvas.width = cW;
-            wCanvas.height = cH;
-            const wCtx = wCanvas.getContext('2d');
-            if (wCtx) {
-              wCtx.fillStyle = ann.backgroundColor || '#ffffff';
-              wCtx.fillRect(0, 0, cW, cH);
-
-              if (ann.text && ann.text.trim()) {
-                const fontSizePx = (ann.fontSize || 16) * dpr;
-                const fontWeight = ann.isBold ? 'bold' : 'normal';
-                const fontStyle = ann.isItalic ? 'italic' : 'normal';
-                const fontFamily = ann.fontFamily || "'Inter', sans-serif";
-
-                wCtx.font = `${fontStyle} ${fontWeight} ${fontSizePx}px ${fontFamily}`;
-                wCtx.fillStyle = ann.color || '#0f172a';
-                wCtx.textBaseline = 'top';
-
-                const lines = ann.text.split('\n');
-                const lineHeightPx = fontSizePx * 1.25;
-
-                lines.forEach((line, lIdx) => {
-                  const yPos = lIdx * lineHeightPx + 3 * dpr;
-                  wCtx.fillText(line, 4 * dpr, yPos);
-
-                  if (ann.isUnderline) {
-                    const textMetrics = wCtx.measureText(line);
-                    wCtx.fillRect(4 * dpr, yPos + fontSizePx, textMetrics.width, 2 * dpr);
-                  }
-                });
-              }
-
-              const wPngUrl = wCanvas.toDataURL('image/png');
-              const wRes = await fetch(wPngUrl);
-              const wBytes = await wRes.arrayBuffer();
-              const wPng = await pdfDoc.embedPng(wBytes);
-
-              page.drawImage(wPng, imagePlacement);
             }
           } else if (ann.type === 'draw' && ann.points && ann.points.length > 0) {
             // High-fidelity Pen: Render offscreen canvas and embed as sharp PNG!
@@ -820,28 +760,6 @@ function getRotatedAnnotationPlacement(
               </button>
 
               <button
-                onClick={() => { setActiveTool('native-text'); setSelectedStampPreset(null); }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition ${
-                  activeTool === 'native-text' ? 'bg-amber-400 text-slate-950 shadow-md font-extrabold' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950'
-                }`}
-                title="Detectar y hacer clic sobre cualquier texto original del PDF para modificarlo"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-                <span>Editar Texto Original</span>
-              </button>
-
-              <button
-                onClick={() => { setActiveTool('whiteout'); setSelectedStampPreset(null); }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition ${
-                  activeTool === 'whiteout' ? 'bg-amber-400 text-slate-950 shadow-md font-extrabold' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950'
-                }`}
-                title="Tapar cualquier elemento (texto, firmas, logos) y reescribir encima"
-              >
-                <Eraser className="w-3.5 h-3.5 text-amber-600" />
-                <span>Corrector</span>
-              </button>
-
-              <button
                 onClick={() => { setActiveTool('text'); setSelectedStampPreset(null); }}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition ${
                   activeTool === 'text' ? 'bg-amber-400 text-slate-950 shadow-md font-extrabold' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950'
@@ -1043,8 +961,6 @@ function getRotatedAnnotationPlacement(
           {/* Active Tool Help Banner */}
           <div className="bg-amber-50 border border-amber-200 px-4 py-2 rounded-xl text-xs text-amber-900 flex items-center justify-between font-medium shadow-sm">
             <span>
-              {activeTool === 'native-text' && 'Haz clic sobre cualquier texto original del PDF para editarlo directamente.'}
-              {activeTool === 'whiteout' && 'Arrastra un recuadro sobre cualquier texto, firma o logo para taparlo y reescribir encima.'}
               {activeTool === 'select' && 'Haz clic en un elemento para moverlo, cambiar su tamaño, fuente o color, o mandarlo al frente o al fondo.'}
               {activeTool === 'text' && 'Haz clic donde quieras escribir.'}
               {activeTool === 'draw' && 'Dibuja a mano alzada. Al soltar, el trazo queda como un elemento que puedes mover.'}
@@ -1095,7 +1011,7 @@ function getRotatedAnnotationPlacement(
                                 height: `${Math.max(3, (a.height || 0.1) * 100)}%`,
                                 backgroundColor: a.type === 'highlight' 
                                   ? (a.color || '#facc15') 
-                                  : a.type === 'whiteout' ? '#ffffff' : a.type === 'stamp' 
+                                  : a.type === 'stamp' 
                                     ? (a.color || '#dc2626') 
                                     : a.type === 'draw'
                                       ? (a.color || '#dc2626')
