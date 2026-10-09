@@ -187,17 +187,30 @@ export const ToolGlyph: React.FC<{ id: CatalogTool['id']; className?: string }> 
 };
 
 /** Brand mark: document sheet with golden pizza slice geometry */
-export const BrandMark: React.FC<{ className?: string }> = ({ className }) => (
-  <svg viewBox="0 0 32 32" className={className} aria-hidden="true">
-    {/* Paper sheet */}
-    <path d="M6 3h13l7 7v17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" fill="#fff" stroke="#1c1917" strokeWidth="1.8" strokeLinejoin="round" />
-    <path d="M19 3v7h7" fill="none" stroke="#1c1917" strokeWidth="1.8" strokeLinejoin="round" />
-    {/* Pizza slice geometry in warm golden crust */}
-    <path d="M16 23L11.5 13a5.5 5.5 0 0 1 9 0z" fill="#f59e0b" stroke="#d97706" strokeWidth="1.4" strokeLinejoin="round" />
-    {/* Crust arc */}
-    <path d="M11.5 13a5.5 5.5 0 0 1 9 0" fill="none" stroke="#b45309" strokeWidth="1.6" strokeLinecap="round" />
-    {/* Pepperoni dots */}
-    <circle cx="16" cy="16.5" r="1.3" fill="#dc2626" />
-    <circle cx="14" cy="19.5" r="0.9" fill="#dc2626" />
-  </svg>
-);
+export const BrandMark: React.FC<{ className?: string }> = ({ className = 'w-7 h-7' }) => (
+  <svg viewBox="0 0 32 32" fill="none" className={className} aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="pizzdf-facet-light" x1="5" y1="6" x2="16" y2="27" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#FBBF24" />
+        <stop offset="100%" stopColor="#F59E0B" />
+      </linearGradient>
+      <linearGradient id="pizzdf-facet-dark" x1="16" y1="6" x2="27" y2="27" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#D97706" />
+        <stop offset="100%" stopColor="#B45309" />
+      </linearGradient>
+      <linearGradient id="pizzdf-crust" x1="5" y1="5" x2="27" y2="9" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#D97706" />
+        <stop offset="50%" stopColor="#B45309" />
+        <stop offset="100%" stopColor="#78350F" />
+      </linearGradient>
+    </defs>
+    <path d="M5.5 8C8.5 6 12 5.5 16 5.5C20 5.5 23.5 6 26.5 8L16 27.5L5.5 8Z" fill="#1C1917" fillOpacity="0.08" transform="translate(0, 1.5)" />
+    <path d="M5 7.5C8.5 6 12 5.5 16 5.5V26.5L5 7.5Z" fill="url(#pizzdf-facet-light)" />
+    <path d="M16 5.5C20 5.5 23.5 6 27 7.5L16 26.5V5.5Z" fill="url(#pizzdf-facet-dark)" />
+    <line x1="16" y1="5.5" x2="16" y2="26.5" stroke="#78350F" strokeWidth="0.8" strokeOpacity="0.45" />
+    <line x1="9" y1="12" x2="14" y2="12" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.9" />
+    <line x1="10.5" y1="16" x2="14" y2="16" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.9" />
+    <line x1="12" y1="20" x2="14" y2="20" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.9" />
+    <path d="M5 7.5C8.5 5.8 12 5.2 16 5.2C20 5.2 23.5 5.8 27 7.5" stroke="url(#pizzdf-crust)" strokeWidth="2.4" strokeLinecap="round" />
+    <path d="M5 7.5C8.5 5.8 12 5.2 16 5.2C20 5.2 23.5 5.8 27 7.5L16 26.5L5 7.5Z" stroke="#78350F" strokeWidth="1.2" strokeLinejoin="round" />
+  </svg>);

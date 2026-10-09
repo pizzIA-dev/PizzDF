@@ -22,7 +22,7 @@ export const Header: React.FC<HeaderProps> = ({ currentTool, onSelectTool, onOpe
         >
           <BrandMark className="w-8 h-8" />
           <span className="font-serif text-[1.65rem] leading-none text-slate-900 tracking-tight">
-            Pizz<span className="text-[var(--gold)] font-medium">DF</span>
+            <span className="text-[var(--gold)] font-medium">P</span>izz<span className="text-[var(--gold)] font-medium">DF</span>
           </span>
         </button>
 
