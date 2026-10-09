@@ -1,3 +1,4 @@
+import { StampCanvas } from '../../utils/stampRenderer';
 ﻿import React, { useState } from 'react';
 import { X, Check, Stamp as StampIcon, Sparkles, UploadCloud, Image as ImageIcon } from 'lucide-react';
 
@@ -17,13 +18,15 @@ interface StampModalProps {
 }
 
 const PRESET_STAMPS: StampData[] = [
-  { label: 'APROBADO', color: '#16a34a', bgColor: '#dcfce7', borderColor: '#86efac' },
-  { label: 'CONFIDENCIAL', color: '#dc2626', bgColor: '#fee2e2', borderColor: '#fca5a5' },
-  { label: 'PAGADO', color: '#059669', bgColor: '#d1fae5', borderColor: '#6ee7b7' },
-  { label: 'RECHAZADO', color: '#e11d48', bgColor: '#ffe4e6', borderColor: '#fda4af' },
-  { label: 'BORRADOR', color: '#2563eb', bgColor: '#dbeafe', borderColor: '#93c5fd' },
-  { label: 'URGENTE', color: '#ea580c', bgColor: '#ffedd5', borderColor: '#fdba74' },
-  { label: 'COPIA', color: '#475569', bgColor: '#f1f5f9', borderColor: '#cbd5e1' },
+  { label: 'CONFIDENCIAL', color: '#b91c1c', bgColor: '#fef2f2', borderColor: '#b91c1c' },
+  { label: 'APROBADO', color: '#15803d', bgColor: '#f0fdf4', borderColor: '#15803d' },
+  { label: 'PAGADO', color: '#1d4ed8', bgColor: '#eff6ff', borderColor: '#1d4ed8' },
+  { label: 'RECHAZADO', color: '#be123c', bgColor: '#fff1f2', borderColor: '#be123c' },
+  { label: 'URGENTE', color: '#c2410c', bgColor: '#fff7ed', borderColor: '#c2410c' },
+  { label: 'BORRADOR', color: '#475569', bgColor: '#f8fafc', borderColor: '#475569' },
+  { label: 'COPIA', color: '#1e40af', bgColor: '#eff6ff', borderColor: '#1e40af' },
+  { label: 'ANULADO', color: '#991b1b', bgColor: '#fef2f2', borderColor: '#991b1b' },
+  { label: 'REVISADO', color: '#0f766e', bgColor: '#f0fdfa', borderColor: '#0f766e' },
 ];
 
 export const StampModal: React.FC<StampModalProps> = ({ isOpen, onClose, onSelectStamp }) => {
@@ -126,14 +129,15 @@ export const StampModal: React.FC<StampModalProps> = ({ isOpen, onClose, onSelec
                     onSelectStamp(stamp);
                     onClose();
                   }}
-                  className="p-3 rounded-xl border-2 font-black uppercase tracking-wider text-xs shadow-sm hover:scale-105 active:scale-95 transition-all text-center flex items-center justify-center"
-                  style={{
-                    backgroundColor: stamp.bgColor,
-                    borderColor: stamp.borderColor,
-                    color: stamp.color,
-                  }}
+                  className="p-1 rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md hover:scale-[1.03] active:scale-95 transition-all flex items-center justify-center overflow-hidden"
+                  title={`Estampar ${stamp.label}`}
                 >
-                  {stamp.label}
+                  <StampCanvas
+                    label={stamp.label}
+                    color={stamp.color}
+                    width={130}
+                    height={38}
+                  />
                 </button>
               ))}
             </div>
@@ -179,16 +183,14 @@ export const StampModal: React.FC<StampModalProps> = ({ isOpen, onClose, onSelec
             {/* Live Preview */}
             {customText.trim() && (
               <div className="pt-2 flex flex-col items-center justify-center">
-                <span className="text-[10px] text-slate-400 mb-1">Vista previa:</span>
-                <div
-                  className="px-5 py-2 rounded-xl border-2 font-black uppercase tracking-wider text-sm shadow-md"
-                  style={{
-                    backgroundColor: `${customColor}22`,
-                    borderColor: customColor,
-                    color: customColor,
-                  }}
-                >
-                  {customText.toUpperCase()}
+                <span className="text-[10px] text-slate-400 mb-1">Vista previa del sello:</span>
+                <div className="p-2 bg-white rounded-xl border border-slate-200 shadow-sm flex items-center justify-center">
+                  <StampCanvas
+                    label={customText.toUpperCase()}
+                    color={customColor}
+                    width={220}
+                    height={60}
+                  />
                 </div>
               </div>
             )}

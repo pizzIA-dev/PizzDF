@@ -1,3 +1,4 @@
+import { drawInkStamp } from '../../utils/stampRenderer';
 import React, { useState, useRef, useEffect } from 'react';
 import { 
   ArrowLeft, 
@@ -531,34 +532,17 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               });
             }
           } else if (ann.type === 'stamp') {
-            // High-fidelity Stamp matching UI design exactly
+            // High-fidelity Authentic Ink Stamp (100% WYSIWYG matching preview)
+            const exportScale = 3;
+            const sW = Math.max(150, Math.round(pdfW * exportScale));
+            const sH = Math.max(60, Math.round(pdfH * exportScale));
             const stampCanvas = document.createElement('canvas');
-            stampCanvas.width = 400;
-            stampCanvas.height = 120;
+            stampCanvas.width = sW;
+            stampCanvas.height = sH;
             const sCtx = stampCanvas.getContext('2d');
             if (sCtx) {
-              const hex = ann.color || '#dc2626';
-              const sW = Math.max(100, Math.round(pdfW * 2));
-              const sH = Math.max(40, Math.round(pdfH * 2));
-              stampCanvas.width = sW;
-              stampCanvas.height = sH;
-
-              sCtx.fillStyle = hex + '22';
-              sCtx.strokeStyle = hex;
-              sCtx.lineWidth = Math.max(3, sH * 0.06);
-              sCtx.beginPath();
-              const radius = Math.min(20, sH * 0.25);
-              sCtx.roundRect(sCtx.lineWidth, sCtx.lineWidth, sW - sCtx.lineWidth * 2, sH - sCtx.lineWidth * 2, radius);
-              sCtx.fill();
-              sCtx.stroke();
-
-              // Calculate proportional font size
-              const stampFontSize = Math.round(Math.min(sW * 0.12, sH * 0.45));
-              sCtx.fillStyle = hex;
-              sCtx.font = `900 ${stampFontSize}px Inter, Arial, sans-serif`;
-              sCtx.textAlign = 'center';
-              sCtx.textBaseline = 'middle';
-              sCtx.fillText((ann.stampLabel || 'BORRADOR').toUpperCase(), sW / 2, sH / 2);
+              const hex = ann.color || '#b91c1c';
+              drawInkStamp(sCtx, sW, sH, ann.stampLabel || 'BORRADOR', hex);
 
               const stampPngUrl = stampCanvas.toDataURL('image/png');
               const stampRes = await fetch(stampPngUrl);

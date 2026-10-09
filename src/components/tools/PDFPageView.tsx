@@ -1,3 +1,4 @@
+import { StampCanvas } from '../../utils/stampRenderer';
 import React, { useRef, useEffect, useState } from 'react';
 import { 
   Trash2, 
@@ -879,17 +880,12 @@ export const PDFPageView: React.FC<PDFPageViewProps> = ({
                     <img src={ann.imageData} alt="Sello" className="w-full h-full object-contain pointer-events-none" />
                   </div>
                 ) : (
-                  <div
-                    className="w-full h-full px-2 py-1 rounded-xl border-2 font-black uppercase tracking-wider flex items-center justify-center text-center shadow-lg select-none"
-                    style={{
-                      backgroundColor: `${ann.color || '#dc2626'}18`,
-                      borderColor: ann.color || '#dc2626',
-                      color: ann.color || '#dc2626',
-                      fontSize: `${Math.max(10, Math.min(widthPx * 0.12, heightPx * 0.45))}px`,
-                    }}
-                  >
-                    {ann.stampLabel || 'BORRADOR'}
-                  </div>
+                  <StampCanvas
+                    label={ann.stampLabel || 'BORRADOR'}
+                    color={ann.color || '#b91c1c'}
+                    width={widthPx}
+                    height={heightPx}
+                  />
                 )
               )}
 
