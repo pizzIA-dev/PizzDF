@@ -97,7 +97,7 @@ export const CompressTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           </button>
           <div>
             <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-              <Minimize2 className="w-6 h-6 text-[var(--tomato)]" />
+              <Minimize2 className="w-6 h-6 text-[var(--gold)]" />
               Comprimir
             </h2>
             <p className="text-xs text-slate-600">

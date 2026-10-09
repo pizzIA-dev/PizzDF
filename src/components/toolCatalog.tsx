@@ -3,12 +3,9 @@ import type { ToolId } from '../types';
 
 export interface CatalogTool {
   id: Exclude<ToolId, 'dashboard'>;
-  /** Name shown as the big verb on the home index */
   title: string;
-  /** Short name for the top navigation */
   short: string;
   description: string;
-  /** What the tool takes as input */
   input: 'pdf' | 'image';
 }
 
@@ -24,7 +21,7 @@ export const TOOLS: CatalogTool[] = [
     id: 'organize',
     title: 'Organizar páginas',
     short: 'Organizar',
-    description: 'Arrastra para reordenar. Gira o elimina las páginas que sobran.',
+    description: 'Arrastra para reordenar. Gira o elimina las páginas que no necesites.',
     input: 'pdf',
   },
   {
@@ -45,7 +42,7 @@ export const TOOLS: CatalogTool[] = [
     id: 'compress',
     title: 'Comprimir',
     short: 'Comprimir',
-    description: 'Reduce el peso para mandarlo por correo o subirlo a un trámite con límite.',
+    description: 'Reduce el peso para enviarlo por correo o subirlo a un trámite con límite de tamaño.',
     input: 'pdf',
   },
   {
@@ -66,7 +63,7 @@ export const TOOLS: CatalogTool[] = [
     id: 'pdf-to-img',
     title: 'PDF a imágenes',
     short: 'PDF a imágenes',
-    description: 'Guarda cada página como una imagen.',
+    description: 'Guarda cada página como una imagen en JPG o PNG.',
     input: 'pdf',
   },
   {
@@ -78,7 +75,7 @@ export const TOOLS: CatalogTool[] = [
   },
 ];
 
-const ACCENT = '#d7381d';
+const ACCENT = '#d97706';
 
 const line = {
   stroke: 'currentColor',
@@ -89,7 +86,6 @@ const line = {
 };
 const accent = { ...line, stroke: ACCENT };
 
-/** Each tool is drawn with the thing it does to a page, not with a generic icon. */
 export const ToolGlyph: React.FC<{ id: CatalogTool['id']; className?: string }> = ({ id, className }) => {
   let body: React.ReactNode = null;
   switch (id) {
@@ -145,7 +141,7 @@ export const ToolGlyph: React.FC<{ id: CatalogTool['id']; className?: string }> 
         <>
           <rect x="11" y="6" width="22" height="34" rx="1.5" {...line} />
           <path d="M16 13h12M16 19h12" {...line} />
-          <path d="M16 36L36 20" stroke={ACCENT} strokeWidth="4" strokeLinecap="round" opacity="0.85" />
+          <path d="M16 36L36 20" stroke={ACCENT} strokeWidth="4" strokeLinecap="round" opacity="0.9" />
         </>
       );
       break;
@@ -154,7 +150,7 @@ export const ToolGlyph: React.FC<{ id: CatalogTool['id']; className?: string }> 
         <>
           <rect x="11" y="6" width="22" height="34" rx="1.5" {...line} />
           <path d="M16 14h12M16 20h12M16 26h8" {...line} />
-          <text x="22" y="37" textAnchor="middle" fontFamily="IBM Plex Mono, monospace" fontSize="8" fontWeight="500" fill={ACCENT}>
+          <text x="22" y="37" textAnchor="middle" fontFamily="IBM Plex Mono, monospace" fontSize="8" fontWeight="600" fill={ACCENT}>
             7
           </text>
         </>
@@ -190,11 +186,18 @@ export const ToolGlyph: React.FC<{ id: CatalogTool['id']; className?: string }> 
   );
 };
 
-/** Brand mark: a sheet with a folded corner and one tomato dot. */
+/** Brand mark: document sheet with golden pizza slice geometry */
 export const BrandMark: React.FC<{ className?: string }> = ({ className }) => (
   <svg viewBox="0 0 32 32" className={className} aria-hidden="true">
-    <path d="M7 3h12l6 6v20H7z" fill="#fff" stroke="#17171b" strokeWidth="2" strokeLinejoin="round" />
-    <path d="M19 3v6h6" fill="none" stroke="#17171b" strokeWidth="2" strokeLinejoin="round" />
-    <circle cx="16" cy="20" r="4.5" fill={ACCENT} />
+    {/* Paper sheet */}
+    <path d="M6 3h13l7 7v17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" fill="#fff" stroke="#1c1917" strokeWidth="1.8" strokeLinejoin="round" />
+    <path d="M19 3v7h7" fill="none" stroke="#1c1917" strokeWidth="1.8" strokeLinejoin="round" />
+    {/* Pizza slice geometry in warm golden crust */}
+    <path d="M16 23L11.5 13a5.5 5.5 0 0 1 9 0z" fill="#f59e0b" stroke="#d97706" strokeWidth="1.4" strokeLinejoin="round" />
+    {/* Crust arc */}
+    <path d="M11.5 13a5.5 5.5 0 0 1 9 0" fill="none" stroke="#b45309" strokeWidth="1.6" strokeLinecap="round" />
+    {/* Pepperoni dots */}
+    <circle cx="16" cy="16.5" r="1.3" fill="#dc2626" />
+    <circle cx="14" cy="19.5" r="0.9" fill="#dc2626" />
   </svg>
 );

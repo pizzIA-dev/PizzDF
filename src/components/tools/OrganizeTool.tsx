@@ -381,7 +381,7 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           </button>
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2.5">
-              <Layers className="w-5 h-5 text-[var(--tomato)]" />
+              <Layers className="w-5 h-5 text-[var(--gold)]" />
               Organizar páginas
             </h2>
             <p className="text-xs text-slate-600">

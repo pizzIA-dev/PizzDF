@@ -125,7 +125,7 @@ export const ImageToPdfTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
           </button>
           <div>
             <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-              <FileSpreadsheet className="w-6 h-6 text-[var(--tomato)]" />
+              <FileSpreadsheet className="w-6 h-6 text-[var(--gold)]" />
               Imágenes a PDF
             </h2>
             <p className="text-xs text-slate-600">

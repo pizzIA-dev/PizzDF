@@ -132,14 +132,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectTool }) => {
                     <button
                       type="button"
                       onClick={() => inputRef.current?.click()}
-                      className="underline underline-offset-4 text-slate-900 hover:text-[var(--tomato)]"
+                      className="underline underline-offset-4 text-slate-900 hover:text-[var(--gold)]"
                     >
                       Cambiar
                     </button>
                     <button
                       type="button"
                       onClick={() => setStaged(null)}
-                      className="underline underline-offset-4 text-slate-600 hover:text-[var(--tomato)]"
+                      className="underline underline-offset-4 text-slate-600 hover:text-[var(--gold)]"
                     >
                       Quitar
                     </button>
@@ -148,7 +148,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectTool }) => {
               )}
             </div>
 
-            {note && <p className="mt-3 text-sm text-[var(--tomato)]">{note}</p>}
+            {note && <p className="mt-3 text-sm text-[var(--gold)]">{note}</p>}
           </div>
         </div>
       </section>
@@ -172,7 +172,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectTool }) => {
                 onClick={() => choose(tool.id, tool.input)}
                 data-dim={!applies(tool.input)}
                 style={{ ['--i' as string]: idx } as React.CSSProperties}
-                className="tool-row w-full text-left grid grid-cols-[3.25rem_1fr_auto] items-center gap-5 px-3 sm:px-4 py-5 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--tomato)]"
+                className="tool-row w-full text-left grid grid-cols-[3.25rem_1fr_auto] items-center gap-5 px-3 sm:px-4 py-5 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--gold)]"
               >
                 <ToolGlyph id={tool.id} className="w-12 h-12 text-slate-900" />
                 <span>
@@ -191,7 +191,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectTool }) => {
 
         <p className="mt-8 px-1 text-[15px] leading-relaxed text-slate-600 max-w-[52ch]">
           ¿Tu negocio necesita una herramienta así, hecha a su medida? En{' '}
-          <a href="https://pizzia.org" target="_blank" rel="noreferrer" className="underline underline-offset-4 text-slate-900 hover:text-[var(--tomato)]">
+          <a href="https://pizzia.org" target="_blank" rel="noreferrer" className="underline underline-offset-4 text-slate-900 hover:text-[var(--gold)]">
             PizzIA
           </a>{' '}
           construimos software y automatizaciones. Este mismo sitio es una muestra.

@@ -641,7 +641,7 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           </button>
           <div>
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2">
-              <FileEdit className="w-5 h-5 text-[var(--tomato)]" />
+              <FileEdit className="w-5 h-5 text-[var(--gold)]" />
               Editar
             </h2>
             <p className="text-xs text-slate-600">

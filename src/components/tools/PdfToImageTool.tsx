@@ -117,7 +117,7 @@ export const PdfToImageTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
           </button>
           <div>
             <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-              <ImageIcon className="w-6 h-6 text-[var(--tomato)]" />
+              <ImageIcon className="w-6 h-6 text-[var(--gold)]" />
               PDF a imágenes
             </h2>
             <p className="text-xs text-slate-600">

@@ -20,8 +20,10 @@ export const Header: React.FC<HeaderProps> = ({ currentTool, onSelectTool, onOpe
           className="flex items-center gap-2.5 shrink-0 cursor-pointer"
           aria-label="PizzDF, volver al inicio"
         >
-          <BrandMark className="w-7 h-7" />
-          <span className="font-serif text-[1.65rem] leading-none text-slate-900 tracking-tight">PizzDF</span>
+          <BrandMark className="w-8 h-8" />
+          <span className="font-serif text-[1.65rem] leading-none text-slate-900 tracking-tight">
+            Pizz<span className="text-[var(--gold)] font-medium">DF</span>
+          </span>
         </button>
 
         {inTool && (
@@ -39,7 +41,7 @@ export const Header: React.FC<HeaderProps> = ({ currentTool, onSelectTool, onOpe
                   }`}
                 >
                   {t.short}
-                  {active && <span className="absolute left-0 right-0 bottom-0 h-[2px] bg-[var(--tomato)]" />}
+                  {active && <span className="absolute left-0 right-0 bottom-0 h-[2px] bg-[var(--gold)]" />}
                 </button>
               );
             })}
@@ -60,7 +62,7 @@ export const Header: React.FC<HeaderProps> = ({ currentTool, onSelectTool, onOpe
             <button
               type="button"
               onClick={onOpenDonation}
-              className="text-slate-900 underline underline-offset-4 decoration-[var(--tomato)] decoration-2 hover:text-[var(--tomato)] cursor-pointer"
+              className="text-slate-900 underline underline-offset-4 decoration-[var(--gold)] decoration-2 hover:text-[var(--gold)] cursor-pointer"
             >
               Invítame un café
             </button>

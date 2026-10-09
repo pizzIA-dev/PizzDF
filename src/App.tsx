@@ -97,7 +97,7 @@ export function App() {
               <button
                 type="button"
                 onClick={() => setShowDonation(true)}
-                className="underline underline-offset-4 decoration-[var(--tomato)] decoration-2 text-slate-900 hover:text-[var(--tomato)] cursor-pointer"
+                className="underline underline-offset-4 decoration-[var(--gold)] decoration-2 text-slate-900 hover:text-[var(--gold)] cursor-pointer"
               >
                 Apoyar
               </button>
@@ -122,11 +122,11 @@ export function App() {
         <div className="max-w-6xl mx-auto px-5 sm:px-8 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3">
           <p>
             Hecho por{' '}
-            <a href="https://pizzia.org" target="_blank" rel="noreferrer" className="underline underline-offset-4 text-slate-900 hover:text-[var(--tomato)]">
+            <a href="https://pizzia.org" target="_blank" rel="noreferrer" className="underline underline-offset-4 text-slate-900 hover:text-[var(--gold)]">
               PizzIA
             </a>{' '}
             y{' '}
-            <a href="https://luislasa.dev" target="_blank" rel="noreferrer" className="underline underline-offset-4 text-slate-900 hover:text-[var(--tomato)]">
+            <a href="https://luislasa.dev" target="_blank" rel="noreferrer" className="underline underline-offset-4 text-slate-900 hover:text-[var(--gold)]">
               Luis Lasa
             </a>
             .

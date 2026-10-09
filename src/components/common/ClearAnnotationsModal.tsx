@@ -23,7 +23,7 @@ export const ClearAnnotationsModal: React.FC<ClearAnnotationsModalProps> = ({
       <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-md p-6 space-y-5 shadow-2xl text-slate-800">
         <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <div className="flex items-center gap-2.5 text-slate-900 font-bold">
-            <AlertTriangle className="w-5 h-5 text-[var(--tomato)]" />
+            <AlertTriangle className="w-5 h-5 text-[var(--gold)]" />
             <span className="font-serif text-lg">Borrar cambios</span>
           </div>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-700 p-1 rounded-lg">
@@ -48,7 +48,7 @@ export const ClearAnnotationsModal: React.FC<ClearAnnotationsModalProps> = ({
                 <FileText className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="text-sm font-semibold text-slate-900 group-hover:text-[var(--tomato)]">
+                <h4 className="text-sm font-semibold text-slate-900 group-hover:text-[var(--gold)]">
                   Solo esta página (pág. {currentPage})
                 </h4>
                 <p className="text-xs text-slate-500">Deja intactas las demás páginas</p>

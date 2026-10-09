@@ -160,7 +160,7 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
           <button
             type="button"
             onClick={createSamplePdf}
-            className="underline underline-offset-4 text-slate-900 hover:text-[var(--tomato)] cursor-pointer"
+            className="underline underline-offset-4 text-slate-900 hover:text-[var(--gold)] cursor-pointer"
           >
             Prueba con un documento de ejemplo
           </button>
