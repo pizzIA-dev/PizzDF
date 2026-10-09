@@ -110,7 +110,7 @@ export const ImageToPdfTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
       downloadBlob(blob, 'pizzdf_imagenes_convertidas.pdf');
     } catch (err) {
       console.error(err);
-      addToast('error', 'Error al convertir imágenes a PDF.');
+      addToast('error', 'No se pudo crear el PDF. Inténtalo de nuevo.');
     } finally {
       setProcessing(false);
     }
@@ -129,7 +129,7 @@ export const ImageToPdfTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
               Imágenes a PDF
             </h2>
             <p className="text-xs text-slate-600">
-              Convierte fotos, comprobantes o capturas JPG y PNG en un solo documento PDF limpio.
+              Junta fotos, comprobantes o capturas en un solo PDF, una imagen por página.
             </p>
           </div>
         </div>
@@ -160,14 +160,14 @@ export const ImageToPdfTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
         multiple={true}
         allowSample={false}
         onFilesSelected={handleFilesAdded}
-        title="Arrastra tus imágenes JPG o PNG aquí"
-        subtitle="Puedes agregar varias imágenes simultáneamente y reordenarlas"
+        title="Agrega las imágenes"
+        subtitle="JPG, PNG o WebP. Puedes elegir varias y ordenarlas antes de crear el PDF."
       />
 
       {items.length > 0 && (
         <div className="space-y-4 pt-4">
           <div className="flex items-center justify-between text-xs text-slate-600">
-            <span>Orden de las páginas en el PDF final:</span>
+            <span>Así quedarán las páginas:</span>
             <span className="text-slate-900 font-semibold">{items.length} imágenes cargadas</span>
           </div>
 

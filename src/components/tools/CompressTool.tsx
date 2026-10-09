@@ -52,7 +52,7 @@ export const CompressTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       setFileBuffer(buffer);
     } catch (err) {
       console.error(err);
-      addToast('error', 'Error al leer el archivo PDF.');
+      addToast('error', 'No pudimos leer ese PDF. ¿Está dañado o protegido con contraseña?');
     }
   };
 
@@ -70,7 +70,7 @@ export const CompressTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       });
     } catch (err) {
       console.error(err);
-      addToast('error', 'Error durante la compresión del PDF.');
+      addToast('error', 'No se pudo comprimir ese PDF.');
     } finally {
       setProcessing(false);
     }
@@ -98,10 +98,10 @@ export const CompressTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           <div>
             <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
               <Minimize2 className="w-6 h-6 text-[var(--tomato)]" />
-              Comprimir PDF
+              Comprimir
             </h2>
             <p className="text-xs text-slate-600">
-              Reduce el tamaño de tus archivos para enviarlos por email o plataformas sin perder legibilidad.
+              Baja el peso del PDF para mandarlo por correo o subirlo a un trámite con límite de tamaño.
             </p>
           </div>
         </div>
@@ -125,8 +125,8 @@ export const CompressTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         <div className="py-12">
           <FileDropzone
             onFilesSelected={handleFileSelected}
-            title="Sube el PDF que deseas comprimir"
-            subtitle="Elige el nivel de compresión deseado y ahorra hasta un 80% de espacio"
+            title="Abre el PDF que quieres aligerar"
+            subtitle="El ahorro depende del contenido: un escaneado baja mucho, uno de solo texto casi nada."
           />
         </div>
       ) : (
@@ -147,21 +147,21 @@ export const CompressTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             {[
               {
                 id: 'extreme' as QualityLevel,
-                title: 'Compresión Extrema',
-                desc: 'Menor tamaño posible (~70-85% ahorro). Ideal para trámites con límite de 2MB.',
-                tag: 'MÁXIMO AHORRO',
+                title: 'Muy pequeño',
+                desc: 'El archivo más pequeño posible. Las imágenes pierden calidad a simple vista.',
+                tag: 'Más pequeño',
               },
               {
                 id: 'medium' as QualityLevel,
                 title: 'Recomendada',
-                desc: 'Equilibrio perfecto entre nitidez visual y reducción de peso (~50-65% ahorro).',
-                tag: 'RECOMENDADA',
+                desc: 'Punto medio entre peso y nitidez. Sirve para casi todo.',
+                tag: 'Recomendada',
               },
               {
                 id: 'light' as QualityLevel,
-                title: 'Compresión Ligera',
-                desc: 'Calidad casi idéntica al original con optimización de streams (~25-40% ahorro).',
-                tag: 'ALTA CALIDAD',
+                title: 'Ligera',
+                desc: 'Casi igual al original, con un ahorro menor.',
+                tag: 'Más fiel',
               },
             ].map(lvl => (
               <div
@@ -203,7 +203,7 @@ export const CompressTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 ) : (
                   <>
                     <Minimize2 className="w-5 h-5" />
-                    <span>Comprimir PDF Ahora</span>
+                    <span>Comprimir Ahora</span>
                   </>
                 )}
               </button>
@@ -216,7 +216,7 @@ export const CompressTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       style={{ width: `${progress}%` }}
                     />
                   </div>
-                  <p className="text-xs text-slate-600">Procesando y re-muestreando páginas...</p>
+                  <p className="text-xs text-slate-600">Reduciendo las imágenes de cada página…</p>
                 </div>
               )}
             </div>
@@ -228,9 +228,9 @@ export const CompressTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               </div>
 
               <div className="space-y-1">
-                <h3 className="text-2xl font-bold text-slate-900">¡Compresión completada con éxito!</h3>
+                <h3 className="text-2xl font-bold text-slate-900">Listo, pesa menos.</h3>
                 <p className="text-sm text-slate-600">
-                  Tu documento fue optimizado al instante sin salir de tu computadora.
+                  Se comprimió en tu navegador; el archivo no salió de tu equipo.
                 </p>
               </div>
 

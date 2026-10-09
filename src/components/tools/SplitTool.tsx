@@ -72,7 +72,7 @@ export const SplitTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       setRangeInput('1');
     } catch (err) {
       console.error(err);
-      addToast('error', 'Error al procesar el PDF para dividir.');
+      addToast('error', 'No pudimos abrir ese PDF.');
     } finally {
       setLoading(false);
     }
@@ -266,7 +266,7 @@ export const SplitTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
       if (splitMode === 'extract') {
         if (selectedPages.length === 0) {
-          addToast('error', 'Por favor selecciona al menos una página para extraer.');
+          addToast('error', 'Marca al menos una página.');
           return;
         }
 
@@ -293,7 +293,7 @@ export const SplitTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       }
     } catch (err) {
       console.error(err);
-      addToast('error', 'Error al separar las páginas del PDF.');
+      addToast('error', 'No se pudo separar el PDF. Inténtalo de nuevo.');
     } finally {
       setProcessing(false);
     }
@@ -310,10 +310,10 @@ export const SplitTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           <div>
             <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
               <Scissors className="w-6 h-6 text-[var(--tomato)]" />
-              Dividir y Separar PDF
+              Dividir
             </h2>
             <p className="text-xs text-slate-600">
-              Extrae páginas seleccionadas a un nuevo documento o separa cada página en archivos individuales.
+              Saca las páginas que necesitas a un archivo nuevo, o separa cada página en su propio PDF.
             </p>
           </div>
         </div>
@@ -362,14 +362,14 @@ export const SplitTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         <div className="py-12">
           <FileDropzone
             onFilesSelected={handleFileSelected}
-            title="Sube el PDF que deseas dividir"
-            subtitle="Podrás seleccionar rangos de páginas o extraer todas por separado"
+            title="Abre el PDF que quieres dividir"
+            subtitle="Elige páginas sueltas o rangos como 1-3, 5, 8."
           />
         </div>
       ) : loading ? (
         <div className="py-24 text-center space-y-4">
           <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-slate-300 text-sm font-medium">Cargando páginas del documento...</p>
+          <p className="text-slate-300 text-sm font-medium">Abriendo el documento…</p>
         </div>
       ) : (
         <div className="space-y-6">

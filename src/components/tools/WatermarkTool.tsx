@@ -45,7 +45,7 @@ export const WatermarkTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       setFileBuffer(buffer);
     } catch (err) {
       console.error(err);
-      addToast('error', 'Error al leer el archivo PDF.');
+      addToast('error', 'No pudimos leer ese PDF. ¿Está dañado o protegido con contraseña?');
     }
   };
 
@@ -66,7 +66,7 @@ export const WatermarkTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       downloadBlob(blob, `${originalName}_marca_de_agua.pdf`);
     } catch (err) {
       console.error(err);
-      addToast('error', 'Error al aplicar la marca de agua.');
+      addToast('error', 'No se pudo aplicar la marca. Inténtalo de nuevo.');
     } finally {
       setProcessing(false);
     }
@@ -82,10 +82,10 @@ export const WatermarkTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           <div>
             <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
               <Stamp className="w-6 h-6 text-[var(--tomato)]" />
-              Marca de Agua
+              Marca de agua
             </h2>
             <p className="text-xs text-slate-600">
-              Protege tus documentos añadiendo textos personalizados en diagonal o en horizontal con transparencia.
+              Escribe un texto como CONFIDENCIAL o COPIA y se estampa en todas las páginas.
             </p>
           </div>
         </div>
@@ -116,7 +116,7 @@ export const WatermarkTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               ) : (
                 <>
                   <Download className="w-4 h-4" />
-                  <span>Descargar con Marca de Agua</span>
+                  <span>Descargar con marca</span>
                 </>
               )}
             </button>
@@ -128,8 +128,8 @@ export const WatermarkTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         <div className="py-12">
           <FileDropzone
             onFilesSelected={handleFileSelected}
-            title="Sube el PDF para añadir marca de agua"
-            subtitle="Personaliza el texto, la inclinación, la opacidad y los colores en tiempo real"
+            title="Abre el PDF que quieres marcar"
+            subtitle="Ajusta texto, inclinación, opacidad y color, y mira una vista previa antes de descargar."
           />
         </div>
       ) : (

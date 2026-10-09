@@ -42,7 +42,7 @@ export const PageNumberTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
       setFileBuffer(buffer);
     } catch (err) {
       console.error(err);
-      addToast('error', 'Error al leer el archivo PDF.');
+      addToast('error', 'No pudimos leer ese PDF. ¿Está dañado o protegido con contraseña?');
     }
   };
 
@@ -62,7 +62,7 @@ export const PageNumberTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
       downloadBlob(blob, `${originalName}_numerado.pdf`);
     } catch (err) {
       console.error(err);
-      addToast('error', 'Error al numerar las páginas del PDF.');
+      addToast('error', 'No se pudo numerar. Inténtalo de nuevo.');
     } finally {
       setProcessing(false);
     }
@@ -78,10 +78,10 @@ export const PageNumberTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
           <div>
             <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
               <Hash className="w-6 h-6 text-[var(--tomato)]" />
-              Numerar Páginas
+              Numerar
             </h2>
             <p className="text-xs text-slate-600">
-              Añade folios o números de página automáticamente a cada hoja de tu documento.
+              Pone el número de página, o un folio, en la esquina o el centro que elijas.
             </p>
           </div>
         </div>
@@ -112,7 +112,7 @@ export const PageNumberTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
               ) : (
                 <>
                   <Download className="w-4 h-4" />
-                  <span>Descargar PDF Numerado</span>
+                  <span>Descargar numerado</span>
                 </>
               )}
             </button>
@@ -124,8 +124,8 @@ export const PageNumberTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
         <div className="py-12">
           <FileDropzone
             onFilesSelected={handleFileSelected}
-            title="Sube el PDF que deseas numerar"
-            subtitle="Elige la posición, el formato y el tamaño del número de página"
+            title="Abre el PDF que quieres numerar"
+            subtitle="Tú decides dónde va y cómo se ve: «Página 1 de 12», solo el número o un folio."
           />
         </div>
       ) : (

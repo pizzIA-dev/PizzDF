@@ -75,7 +75,7 @@ export const StampModal: React.FC<StampModalProps> = ({ isOpen, onClose, onSelec
         <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <div className="flex items-center gap-2.5 text-slate-900 font-extrabold text-base">
             <StampIcon className="w-5 h-5 text-amber-400" />
-            <span>Seleccionar o Crear Sello</span>
+            <span>Sellos</span>
           </div>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-700 p-1 rounded-lg">
             <X className="w-5 h-5" />
@@ -90,7 +90,7 @@ export const StampModal: React.FC<StampModalProps> = ({ isOpen, onClose, onSelec
               tab === 'preset' ? 'bg-amber-400 text-slate-950 font-black' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <span>Rápidos</span>
+            <span>Predefinidos</span>
           </button>
           <button
             onClick={() => setTab('custom')}
@@ -99,7 +99,7 @@ export const StampModal: React.FC<StampModalProps> = ({ isOpen, onClose, onSelec
             }`}
           >
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Texto Propio</span>
+            <span>Personalizado</span>
           </button>
           <button
             onClick={() => setTab('image')}
@@ -116,7 +116,7 @@ export const StampModal: React.FC<StampModalProps> = ({ isOpen, onClose, onSelec
         {tab === 'preset' && (
           <div className="space-y-3">
             <span className="text-xs font-bold uppercase text-slate-600 tracking-wider">
-              Sellos Rápidos Oficiales:
+              Elige un sello:
             </span>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
               {PRESET_STAMPS.map(stamp => (
@@ -149,7 +149,7 @@ export const StampModal: React.FC<StampModalProps> = ({ isOpen, onClose, onSelec
                 type="text"
                 value={customText}
                 onChange={e => setCustomText(e.target.value)}
-                placeholder="Ej. REVISADO POR LUIS, FECHA..."
+                placeholder="Ej. REVISADO, COPIA, FECHA..."
                 className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-400 uppercase"
               />
             </div>
@@ -216,8 +216,8 @@ export const StampModal: React.FC<StampModalProps> = ({ isOpen, onClose, onSelec
                 className="hidden"
               />
               <UploadCloud className="w-8 h-8 text-amber-400 mb-2" />
-              <span className="text-xs font-bold text-slate-800">Subir imagen o logo de sello notarial / corporativo</span>
-              <span className="text-[11px] text-slate-500 mt-0.5">Soporta sellos redondos o firmas en PNG transparente</span>
+              <span className="text-xs font-bold text-slate-800">Sube una imagen o logo de tu sello</span>
+              <span className="text-[11px] text-slate-500 mt-0.5">PNG transparente recomendado</span>
             </label>
 
             {stampImageUrl && (

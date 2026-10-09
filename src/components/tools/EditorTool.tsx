@@ -250,7 +250,7 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const handleStampChosen = (stamp: StampData) => {
     setSelectedStampPreset(stamp);
     setActiveTool('stamp');
-    addToast('success', `Modo Sello activo ("${stamp.label}"). Haz clic en cualquier lugar del PDF para estampar.`);
+    addToast('success', `Sello «${stamp.label}» listo: haz clic donde quieras ponerlo.`);
   };
 
   // Signature Saved
@@ -268,7 +268,7 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     };
     handleAddAnnotation(newAnn);
     setSelectedAnnId(newAnn.id);
-    addToast('success', 'Firma agregada. Puedes moverla y ajustar su tamaño libremente.');
+    addToast('success', 'Firma lista. Arrástrala para moverla o cambia su tamaño.');
   };
 
   // Image Uploaded
@@ -300,7 +300,7 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const handleUndo = () => {
     if (annotations.length === 0) return;
     setAnnotations(prev => prev.slice(0, -1));
-    addToast('info', 'Última acción deshecha');
+    addToast('info', 'Deshecho');
   };
 
     // Clear choices: Current page vs All pages
@@ -314,7 +314,7 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const handleClearAllPages = () => {
     setAnnotations([]);
     setSelectedAnnId(null);
-    addToast('info', 'Todas las anotaciones del documento han sido eliminadas');
+    addToast('info', 'Quitaste todo lo que habías agregado.');
   };
 
   // Scroll smoothly to a specific page inside the container ONLY (without jumping the page)
@@ -622,10 +622,10 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       const blob = new Blob([finalPdfBytes as unknown as BlobPart], { type: 'application/pdf' });
       const originalName = file?.name?.replace('.pdf', '') || 'documento';
       downloadBlob(blob, `${originalName}_editado.pdf`);
-      addToast('success', 'Documento exportado y descargado exitosamente');
+      addToast('success', 'Listo, tu PDF se descargó.');
     } catch (err: any) {
       console.error('Error exporting PDF:', err);
-      addToast('error', 'Error al exportar: ' + (err?.message || 'verifica los elementos agregados.'));
+      addToast('error', 'No se pudo guardar: ' + (err?.message || 'revisa lo que agregaste.'));
     } finally {
       setSaving(false);
     }
@@ -642,10 +642,10 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           <div>
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2">
               <FileEdit className="w-5 h-5 text-[var(--tomato)]" />
-              Editor de PDF
+              Editar
             </h2>
             <p className="text-xs text-slate-600">
-              Desplázate por el documento, redacta texto con fuentes libres, estampa firmas, sellos o dibuja con control total.
+              Haz clic sobre el documento para escribir, dibujar o firmar. Todo lo que agregues se puede mover después.
             </p>
           </div>
         </div>
@@ -690,14 +690,14 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         <div className="py-12">
           <FileDropzone
             onFilesSelected={handleFileSelected}
-            title="Sube el PDF que deseas editar"
-            subtitle="Podrás scrollear por todas las páginas, redactar con fuentes libres, dibujar trazos movibles, estampar y firmar"
+            title="Abre el PDF que quieres editar"
+            subtitle="Escribe encima, firma, estampa sellos, dibuja o inserta imágenes y tablas."
           />
         </div>
       ) : loading ? (
         <div className="py-24 text-center space-y-4">
           <div className="w-10 h-10 border-3 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-slate-300 text-xs font-semibold">Cargando páginas del documento...</p>
+          <p className="text-slate-300 text-xs font-semibold">Abriendo el documento…</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -929,10 +929,10 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           {/* Active Tool Help Banner */}
           <div className="bg-amber-50 border border-amber-200 px-4 py-2 rounded-xl text-xs text-amber-900 flex items-center justify-between font-medium shadow-sm">
             <span>
-              {activeTool === 'select' && '👆 Modo Selección: Haz clic en cualquier elemento para moverlo, cambiar su tamaño, fuente o color, y cambiar sus capas (al frente/al fondo).'}
-              {activeTool === 'text' && '✍️ Modo Texto: Haz clic en cualquier punto del PDF para redactar directamente con el editor flotante de fuentes libres.'}
-              {activeTool === 'draw' && '✏️ Modo Lápiz: Dibuja trazos libres. Al soltar el lápiz, el trazo se convierte en un elemento seleccionable y movible.'}
-              {activeTool === 'highlight' && '🖍️ Modo Resaltador: Pasa el cursor sobre el texto para destacar ideas clave.'}
+              {activeTool === 'select' && 'Haz clic en un elemento para moverlo, cambiar su tamaño, fuente o color, o mandarlo al frente o al fondo.'}
+              {activeTool === 'text' && 'Haz clic donde quieras escribir.'}
+              {activeTool === 'draw' && 'Dibuja a mano alzada. Al soltar, el trazo queda como un elemento que puedes mover.'}
+              {activeTool === 'highlight' && 'Pasa el cursor sobre el texto para resaltarlo.'}
             </span>
             <span className="text-amber-700 font-mono text-[11px] font-semibold">{numPages} páginas cargadas</span>
           </div>

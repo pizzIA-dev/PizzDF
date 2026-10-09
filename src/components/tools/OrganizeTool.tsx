@@ -83,7 +83,7 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       setSelectedIds(new Set());
     } catch (err) {
       console.error('Error loading PDF:', err);
-      addToast('error', 'Error al leer el archivo PDF.');
+      addToast('error', 'No pudimos leer ese PDF. ¿Está dañado o protegido con contraseña?');
     } finally {
       setLoading(false);
     }
@@ -100,7 +100,7 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
   const handleDelete = (index: number) => {
     if (pages.length <= 1) {
-      addToast('error', 'El documento debe contener al menos una página.');
+      addToast('error', 'Ese PDF no tiene páginas.');
       return;
     }
     setPages(prev => prev.filter((_, i) => i !== index));
@@ -143,7 +143,7 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const handleDeleteSelected = () => {
     if (selectedIds.size === 0) return;
     if (selectedIds.size >= pages.length) {
-      addToast('error', 'No puedes eliminar todas las páginas.');
+      addToast('error', 'Tiene que quedar al menos una página.');
       return;
     }
     setPages(prev => prev.filter(p => !selectedIds.has(p.id)));
@@ -337,7 +337,7 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         remainingItems.splice(insertPos, 0, ...selectedItems);
         return remainingItems;
       });
-      addToast('info', `${selectedIds.size} páginas reordenadas`);
+      addToast('info', `Moviste ${selectedIds.size} páginas juntas`);
     } else {
       handleMove(draggedIndex, targetIndex);
     }
@@ -362,7 +362,7 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       downloadBlob(blob, `${originalName}_organizado.pdf`);
     } catch (err) {
       console.error('Error saving organized PDF:', err);
-      addToast('error', 'Error al generar el PDF organizado.');
+      addToast('error', 'No se pudo armar el PDF. Inténtalo de nuevo.');
     } finally {
       setProcessing(false);
     }
@@ -382,10 +382,10 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2.5">
               <Layers className="w-5 h-5 text-[var(--tomato)]" />
-              Organizador de Páginas
+              Organizar páginas
             </h2>
             <p className="text-xs text-slate-600">
-              Reordena, rota, duplica o elimina páginas arrastrándolas con total libertad.
+              Arrastra las páginas para ponerlas en orden. Gira, duplica o elimina las que no sirvan.
             </p>
           </div>
         </div>
@@ -429,14 +429,14 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         <div className="py-12">
           <FileDropzone
             onFilesSelected={handleFileSelected}
-            title="Sube el PDF que deseas organizar"
-            subtitle="Podrás reordenar las páginas visualmente, rotarlas y eliminar las que no necesites"
+            title="Abre el PDF que quieres reordenar"
+            subtitle="Verás cada página como miniatura para moverla a tu gusto."
           />
         </div>
       ) : loading ? (
         <div className="py-24 text-center space-y-4">
           <div className="w-10 h-10 border-3 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-slate-700 text-xs font-medium">Renderizando miniaturas del documento...</p>
+          <p className="text-slate-700 text-xs font-medium">Preparando miniaturas…</p>
         </div>
       ) : (
         <div className="space-y-6">

@@ -60,7 +60,7 @@ export const MergeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         next.splice(targetIndex, 0, moved);
         return next;
       });
-      addToast('info', 'Archivos reordenados');
+      addToast('info', 'Orden actualizado');
     }
     setDraggedIndex(null);
     setDragOverIndex(null);
@@ -118,7 +118,7 @@ export const MergeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
   const handleMergeAndDownload = async () => {
     if (items.length < 2) {
-      addToast('error', 'Debes agregar al menos 2 documentos PDF para unirlos.');
+      addToast('error', 'Necesitas al menos 2 PDFs para unir.');
       return;
     }
 
@@ -134,7 +134,7 @@ export const MergeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       downloadBlob(blob, 'pizzdf_documentos_unidos.pdf');
     } catch (err) {
       console.error(err);
-      addToast('error', 'Error al fusionar los PDFs.');
+      addToast('error', 'No se pudieron unir. Revisa que ninguno tenga contraseña.');
     } finally {
       setProcessing(false);
     }
@@ -153,10 +153,10 @@ export const MergeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           <div>
             <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
               <Files className="w-6 h-6 text-[var(--tomato)]" />
-              Unir PDFs
+              Unir
             </h2>
             <p className="text-xs text-slate-600">
-              Combina múltiples documentos PDF en uno solo con el orden exacto que necesitas.
+              Junta varios PDFs en uno. Se unen de arriba hacia abajo, así que ordénalos antes.
             </p>
           </div>
         </div>
@@ -170,7 +170,7 @@ export const MergeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             {processing ? (
               <>
                 <RefreshCw className="w-4 h-4 animate-spin" />
-                <span>Fusionando...</span>
+                <span>Uniendo...</span>
               </>
             ) : (
               <>
@@ -186,15 +186,15 @@ export const MergeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       <FileDropzone
         onFilesSelected={handleFilesAdded}
         multiple={true}
-        title="Arrastra los PDFs que deseas unir"
-        subtitle="Puedes añadir varios archivos a la vez y luego ordenarlos a tu gusto"
+        title="Agrega los PDFs que quieres juntar"
+        subtitle="Puedes elegir varios a la vez y cambiar el orden después."
       />
 
       {/* Document List */}
       {items.length > 0 && (
         <div className="space-y-4 pt-4">
           <div className="flex items-center justify-between text-xs text-slate-600 px-1 font-medium">
-            <span>Orden de unión (los archivos se combinarán de arriba hacia abajo):</span>
+            <span>Se unirán en este orden:</span>
             <span className="text-slate-900 font-semibold">{items.length} archivos añadidos</span>
           </div>
 

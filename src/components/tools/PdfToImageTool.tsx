@@ -69,7 +69,7 @@ export const PdfToImageTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
       setImages(converted);
     } catch (err) {
       console.error(err);
-      addToast('error', 'Error al convertir el PDF en imágenes.');
+      addToast('error', 'No se pudo convertir ese PDF.');
     } finally {
       setLoading(false);
     }
@@ -102,7 +102,7 @@ export const PdfToImageTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
       downloadBlob(zipBlob, `${baseName}_imagenes.zip`);
     } catch (err) {
       console.error(err);
-      addToast('error', 'Error al comprimir las imágenes en ZIP.');
+      addToast('error', 'No se pudo armar el ZIP.');
     } finally {
       setZipping(false);
     }
@@ -118,10 +118,10 @@ export const PdfToImageTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
           <div>
             <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
               <ImageIcon className="w-6 h-6 text-[var(--tomato)]" />
-              PDF a Imágenes
+              PDF a imágenes
             </h2>
             <p className="text-xs text-slate-600">
-              Convierte cada página en imágenes nítidas de alta resolución (JPG o PNG) y descárgalas en ZIP.
+              Cada página se guarda como imagen. Descárgalas una por una o todas juntas en un ZIP.
             </p>
           </div>
         </div>
@@ -166,14 +166,14 @@ export const PdfToImageTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
         <div className="py-12">
           <FileDropzone
             onFilesSelected={handleFileSelected}
-            title="Sube el PDF que deseas convertir a imagen"
-            subtitle="Cada página será renderizada con nitidez Retina lista para compartir"
+            title="Abre el PDF que quieres convertir"
+            subtitle="Verás cada página como imagen antes de descargarla."
           />
         </div>
       ) : loading ? (
         <div className="py-24 text-center space-y-4">
           <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-slate-700 text-sm font-medium">Renderizando páginas en alta resolución...</p>
+          <p className="text-slate-700 text-sm font-medium">Convirtiendo las páginas…</p>
         </div>
       ) : (
         <div className="space-y-6">

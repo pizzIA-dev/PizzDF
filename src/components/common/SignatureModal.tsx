@@ -135,7 +135,7 @@ export const SignatureModal: React.FC<SignatureModalProps> = ({ isOpen, onClose,
         <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <div className="flex items-center gap-2.5 text-slate-900 font-extrabold text-base">
             <Edit3 className="w-5 h-5 text-amber-400" />
-            <span>Crear Firma Digital</span>
+            <span>Firmar</span>
           </div>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-700 p-1 rounded-lg">
             <X className="w-5 h-5" />
@@ -228,7 +228,7 @@ export const SignatureModal: React.FC<SignatureModalProps> = ({ isOpen, onClose,
                 className="w-full h-[180px] cursor-crosshair touch-none"
               />
               <div className="absolute bottom-3 left-6 right-6 border-b border-dashed border-slate-300 pointer-events-none flex justify-between text-[11px] text-slate-400">
-                <span>Traza tu firma aquí</span>
+                <span>Traza tu firma con el ratón o el dedo</span>
                 <span>✕</span>
               </div>
             </div>
@@ -243,17 +243,17 @@ export const SignatureModal: React.FC<SignatureModalProps> = ({ isOpen, onClose,
                 type="text"
                 value={typedName}
                 onChange={e => setTypedName(e.target.value)}
-                placeholder="Ej. Luis Angel Pérez"
+                placeholder="Tu nombre o iniciales"
                 className="w-full px-4 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-sm focus:border-amber-400 focus:outline-none"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-800">Estilo de caligrafía:</label>
+              <label className="text-xs font-semibold text-slate-800">Tipo de letra:</label>
               <div className="grid grid-cols-2 gap-2">
                 {[
                   { id: 'Caveat' as const, label: 'Elegante Natural' },
-                  { id: 'Dancing Script' as const, label: 'Caligráfica Clásica' },
+                  { id: 'Dancing Script' as const, label: 'Clásica' },
                 ].map(f => (
                   <button
                     key={f.id}
@@ -303,8 +303,8 @@ export const SignatureModal: React.FC<SignatureModalProps> = ({ isOpen, onClose,
                 className="hidden"
               />
               <UploadCloud className="w-8 h-8 text-amber-400 mb-2" />
-              <span className="text-xs font-bold text-slate-800">Haz clic para subir imagen de tu firma</span>
-              <span className="text-[11px] text-slate-500 mt-0.5">Formatos recomendados: PNG o JPG con fondo claro</span>
+              <span className="text-xs font-bold text-slate-800">Elige una foto o escaneo de tu firma</span>
+              <span className="text-[11px] text-slate-500 mt-0.5">PNG transparente o JPG sobre papel blanco</span>
             </label>
 
             {uploadedImgUrl && (
