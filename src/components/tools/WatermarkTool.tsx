@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { 
   ArrowLeft, 
   Stamp, 
@@ -249,6 +249,20 @@ export const WatermarkTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           </div>
         </div>
       )}
+
+      {/* SEO Content Section */}
+      <section className="mt-16 pt-10 border-t border-slate-200">
+        <div className="prose prose-slate max-w-none text-sm text-slate-600">
+          <h3 className="text-lg font-bold text-slate-900 mb-3">Protege tus documentos: Marca de agua en PDF</h3>
+          <p>
+            Agregar una <strong>marca de agua en PDF</strong> es el método estándar para indicar que un documento es "Confidencial", un "Borrador", o propiedad intelectual de tu empresa. Nuestra herramienta te permite estampar texto personalizado en todas las páginas, con control total sobre la transparencia, el color, el tamaño y el ángulo de inclinación, todo en tiempo real.
+          </p>
+          <p className="mt-3">
+            Para máxima seguridad, <strong>PizzDF aplica la marca de agua localmente</strong>. Tus facturas, reportes internos o manuscritos no son enviados a ningún servidor externo. El documento se procesa íntegramente en la memoria de tu navegador, garantizando que tu información confidencial siga siéndolo.
+          </p>
+        </div>
+      </section>
+
       <ToastNotification toasts={toasts} onDismiss={removeToast} />
 </div>
   );

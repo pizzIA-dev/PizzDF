@@ -1,4 +1,4 @@
-﻿export type ToolId =
+export type ToolId =
   | 'dashboard'
   | 'organize'
   | 'editor'
@@ -8,7 +8,8 @@
   | 'watermark'
   | 'page-numbers'
   | 'pdf-to-img'
-  | 'img-to-pdf';
+  | 'img-to-pdf'
+  | 'privacy';
 
 export interface ToolDef {
   id: ToolId;

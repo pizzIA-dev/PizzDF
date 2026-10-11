@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { 
   ArrowLeft, 
   Hash, 
@@ -231,6 +231,20 @@ export const PageNumberTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
           </div>
         </div>
       )}
+
+      {/* SEO Content Section */}
+      <section className="mt-16 pt-10 border-t border-slate-200">
+        <div className="prose prose-slate max-w-none text-sm text-slate-600">
+          <h3 className="text-lg font-bold text-slate-900 mb-3">Numerar páginas de PDF de manera profesional</h3>
+          <p>
+            Al organizar documentos legales, tesis académicas o reportes extensos, es indispensable <strong>numerar las páginas del PDF</strong>. Nuestra herramienta te permite insertar folios o números de página secuenciales en un solo clic, permitiéndote elegir la posición (inferior izquierda, derecha o centro) y el formato (número simple, "Página X de Y" o folio).
+          </p>
+          <p className="mt-3">
+            Como todas nuestras utilidades, el proceso es completamente seguro. <strong>PizzDF numera tu PDF localmente</strong> sin transferir datos a ningún servidor en la nube, lo que te garantiza el control total sobre tus archivos privados.
+          </p>
+        </div>
+      </section>
+
       <ToastNotification toasts={toasts} onDismiss={removeToast} />
 </div>
   );

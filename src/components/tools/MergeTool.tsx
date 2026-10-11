@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { 
   ArrowLeft, 
   Files, 
@@ -276,6 +276,19 @@ export const MergeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           </div>
         </div>
       )}
+      {/* SEO Content Section */}
+      <section className="mt-16 pt-10 border-t border-slate-200">
+        <div className="prose prose-slate max-w-none text-sm text-slate-600">
+          <h3 className="text-lg font-bold text-slate-900 mb-3">Cómo unir PDFs gratis y de forma segura</h3>
+          <p>
+            Cuando necesitas combinar múltiples documentos, contratos escaneados o reportes en un solo archivo, usar nuestra herramienta para <strong>unir PDF online</strong> es la forma más rápida y segura. Simplemente arrastra tus archivos, ordénalos visualmente arrastrándolos hacia arriba o abajo, y combínalos en un único documento consolidado al instante.
+          </p>
+          <p className="mt-3">
+            A diferencia de los servicios en la nube tradicionales, <strong>PizzDF junta tus PDFs de forma local en tu navegador</strong>. Ninguno de los documentos que unas será subido a la nube, garantizando que tu información personal, financiera o empresarial se mantenga estrictamente privada y fuera del alcance de servidores de terceros.
+          </p>
+        </div>
+      </section>
+
       <ToastNotification toasts={toasts} onDismiss={removeToast} />
 </div>
   );

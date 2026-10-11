@@ -11,9 +11,38 @@ import { WatermarkTool } from './components/tools/WatermarkTool';
 import { PageNumberTool } from './components/tools/PageNumberTool';
 import { PdfToImageTool } from './components/tools/PdfToImageTool';
 import { ImageToPdfTool } from './components/tools/ImageToPdfTool';
+import { PrivacyPolicy } from './components/PrivacyPolicy';
 import { DonationModal } from './components/common/DonationModal';
 
-const VALID_TOOLS: ToolId[] = ['dashboard', 'organize', 'editor', 'merge', 'split', 'compress', 'watermark', 'page-numbers', 'pdf-to-img', 'img-to-pdf'];
+// SEO-friendly slugs in Spanish mapped to ToolIds
+const TOOL_SLUGS: Record<string, ToolId> = {
+  'editar-pdf':       'editor',
+  'organizar-pdf':    'organize',
+  'unir-pdf':         'merge',
+  'dividir-pdf':      'split',
+  'comprimir-pdf':    'compress',
+  'marca-de-agua-pdf':'watermark',
+  'numerar-pdf':      'page-numbers',
+  'pdf-a-imagen':     'pdf-to-img',
+  'imagenes-a-pdf':   'img-to-pdf',
+  'privacidad':       'privacy',
+};
+
+const TOOL_PATHS: Record<ToolId, string> = {
+  dashboard:       '/',
+  editor:          '/editar-pdf',
+  organize:        '/organizar-pdf',
+  merge:           '/unir-pdf',
+  split:           '/dividir-pdf',
+  compress:        '/comprimir-pdf',
+  watermark:       '/marca-de-agua-pdf',
+  'page-numbers':  '/numerar-pdf',
+  'pdf-to-img':    '/pdf-a-imagen',
+  'img-to-pdf':    '/imagenes-a-pdf',
+  privacy:         '/privacidad',
+};
+
+const VALID_TOOLS: ToolId[] = ['dashboard', 'organize', 'editor', 'merge', 'split', 'compress', 'watermark', 'page-numbers', 'pdf-to-img', 'img-to-pdf', 'privacy'];
 
 export function App() {
   const [showDonation, setShowDonation] = useState(false);
@@ -33,26 +62,27 @@ export function App() {
   };
 
   const getInitialTool = (): ToolId => {
+    const pathname = window.location.pathname.replace(/\/$/, ''); // strip trailing slash
+    const slug = pathname.replace(/^\//, ''); // remove leading slash
+    if (TOOL_SLUGS[slug]) return TOOL_SLUGS[slug];
+    // Legacy hash fallback (in case someone bookmarked the old URL)
     const hash = window.location.hash.replace('#', '') as ToolId;
-    return VALID_TOOLS.includes(hash) ? hash : 'dashboard';
+    if (VALID_TOOLS.includes(hash)) return hash;
+    return 'dashboard';
   };
 
   const [currentTool, setCurrentToolState] = useState<ToolId>(getInitialTool);
 
   const setCurrentTool = (tool: ToolId) => {
     setCurrentToolState(tool);
-    if (tool === 'dashboard') {
-      window.history.pushState(null, '', window.location.pathname);
-    } else {
-      window.history.pushState(null, '', '#' + tool);
-    }
+    const path = TOOL_PATHS[tool] ?? '/';
+    window.history.pushState(null, '', path);
     window.scrollTo({ top: 0 });
   };
 
   React.useEffect(() => {
     const handlePopState = () => {
-      const hash = window.location.hash.replace('#', '') as ToolId;
-      setCurrentToolState(VALID_TOOLS.includes(hash) ? hash : 'dashboard');
+      setCurrentToolState(getInitialTool());
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
@@ -79,6 +109,8 @@ export function App() {
         return <PdfToImageTool onBack={back} />;
       case 'img-to-pdf':
         return <ImageToPdfTool onBack={back} />;
+      case 'privacy':
+        return <PrivacyPolicy onBack={back} />;
       default:
         return <Dashboard onSelectTool={setCurrentTool} />;
     }
@@ -124,14 +156,27 @@ export function App() {
             Hecho por{' '}
             <a href="https://pizzia.org" target="_blank" rel="noreferrer" className="underline underline-offset-4 text-slate-900 hover:text-[var(--gold)]">
               PizzIA
-            </a>{' '}
-            y{' '}
+            </a>
+            ,{' '}
             <a href="https://luislasa.dev" target="_blank" rel="noreferrer" className="underline underline-offset-4 text-slate-900 hover:text-[var(--gold)]">
               Luis Lasa
+            </a>{' '}
+            y{' '}
+            <a href="https://github.com/RoAlro" target="_blank" rel="noreferrer" className="underline underline-offset-4 text-slate-900 hover:text-[var(--gold)]">
+              RoAlro
             </a>
             .
           </p>
-          <p className="font-mono text-xs">pizzdf.com · {new Date().getFullYear()} · tus archivos se quedan en tu navegador</p>
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setCurrentTool('privacy')} 
+              className="underline underline-offset-4 text-slate-600 hover:text-[var(--gold)] transition-colors"
+            >
+              Privacidad
+            </button>
+            <span className="text-slate-300">|</span>
+            <p className="font-mono text-xs">pizzdf.com · {new Date().getFullYear()} · tus archivos se quedan en tu navegador</p>
+          </div>
         </div>
       </footer>
 
@@ -140,4 +185,4 @@ export function App() {
   );
 }
 
-export default App;
+export default App;

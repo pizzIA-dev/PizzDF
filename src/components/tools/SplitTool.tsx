@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { 
   ArrowLeft, 
   Scissors, 
@@ -544,6 +544,19 @@ export const SplitTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           onNavigate={(newIdx) => setPreviewPageIndex(newIdx)}
         />
       )}
+
+      {/* SEO Content Section */}
+      <section className="mt-16 pt-10 border-t border-slate-200">
+        <div className="prose prose-slate max-w-none text-sm text-slate-600">
+          <h3 className="text-lg font-bold text-slate-900 mb-3">Cómo dividir o extraer páginas de un PDF</h3>
+          <p>
+            Separar un documento grande en archivos más pequeños es fundamental para compartir solo la información necesaria. Nuestra herramienta te permite <strong>dividir un PDF gratis</strong> y de dos maneras: puedes extraer páginas específicas para crear un nuevo documento con ellas, o bien dividir el PDF completo en archivos individuales que se descargan cómodamente en un archivo ZIP.
+          </p>
+          <p className="mt-3">
+            El procesamiento local significa que <strong>PizzDF divide tus documentos directamente en tu computadora</strong>. Ninguna de las páginas extraídas, ni el archivo original, tocarán un servidor externo, protegiendo al 100% la privacidad de tus datos de principio a fin.
+          </p>
+        </div>
+      </section>
 
       <ToastNotification toasts={toasts} onDismiss={removeToast} />
 </div>

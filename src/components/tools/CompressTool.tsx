@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { 
   ArrowLeft, 
   Minimize2, 
@@ -263,6 +263,19 @@ export const CompressTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           )}
         </div>
       )}
+      {/* SEO Content Section */}
+      <section className="mt-16 pt-10 border-t border-slate-200">
+        <div className="prose prose-slate max-w-none text-sm text-slate-600">
+          <h3 className="text-lg font-bold text-slate-900 mb-3">¿Por qué comprimir tus PDFs con PizzDF?</h3>
+          <p>
+            Comprimir un archivo PDF es esencial cuando necesitas enviar documentos por correo electrónico, subirlos a plataformas gubernamentales o compartirlos en mensajería con límites estrictos de tamaño. Nuestra herramienta para <strong>comprimir PDF gratis</strong> reduce drásticamente el peso de tus archivos optimizando las imágenes internas y eliminando datos redundantes, sin comprometer la legibilidad.
+          </p>
+          <p className="mt-3">
+            A diferencia de otras plataformas, <strong>PizzDF procesa todo localmente en tu navegador</strong>. Tu PDF nunca se sube a ningún servidor, garantizando privacidad total y absoluta confidencialidad para tus documentos sensibles, contratos o identificaciones.
+          </p>
+        </div>
+      </section>
+
       <ToastNotification toasts={toasts} onDismiss={removeToast} />
 </div>
   );

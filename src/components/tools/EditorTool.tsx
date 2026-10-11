@@ -110,6 +110,20 @@ export const EditorTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const pageContainerRefs = useRef<(HTMLDivElement | null)[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Lazy-load decorative fonts when the editor mounts (improves LCP on homepage)
+  useEffect(() => {
+    const DECORATIVE_FONTS_URL =
+      'https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Dancing+Script:wght@600;700&family=Oswald:wght@500;700&family=Playfair+Display:ital,wght@0,600;1,600&family=Courier+Prime:wght@400;700&display=swap';
+    const linkId = 'pizzdf-decorative-fonts';
+    if (!document.getElementById(linkId)) {
+      const link = document.createElement('link');
+      link.id = linkId;
+      link.rel = 'stylesheet';
+      link.href = DECORATIVE_FONTS_URL;
+      document.head.appendChild(link);
+    }
+  }, []);
+
     // Copy / Paste handlers
   const handleCopy = (ann: PageAnnotation) => {
     setCopiedAnnotation(ann);
@@ -1097,6 +1111,19 @@ function getAnnotationPlacement(
         onClearCurrentPage={handleClearCurrentPage}
         onClearAllPages={handleClearAllPages}
       />
+
+      {/* SEO Content Section */}
+      <section className="mt-16 pt-10 border-t border-slate-200">
+        <div className="prose prose-slate max-w-none text-sm text-slate-600">
+          <h3 className="text-lg font-bold text-slate-900 mb-3">Editar PDF gratis y de forma privada</h3>
+          <p>
+            Nuestro <strong>editor de PDF online</strong> te permite añadir texto, firmas, dibujos a mano alzada, resaltados e imágenes directamente sobre tus documentos. Es ideal para rellenar formularios, firmar contratos digitales o hacer correcciones rápidas en documentos sin necesidad de imprimir ni escanear.
+          </p>
+          <p className="mt-3">
+            Garantizamos tu confidencialidad absoluta: <strong>las firmas, documentos personales y contratos nunca se suben a ningún servidor</strong>. Todo el proceso de edición se realiza 100% de manera local en la memoria de tu dispositivo, asegurando que nadie más tenga acceso a tu información privada.
+          </p>
+        </div>
+      </section>
 
       {/* Toast Notification Container */}
       <ToastNotification toasts={toasts} onDismiss={removeToast} />
