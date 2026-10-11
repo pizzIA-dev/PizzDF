@@ -90,10 +90,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectTool }) => {
           </div>
 
           <h1 className="text-[2.6rem] sm:text-5xl leading-[1.04] text-slate-900 max-w-[11ch] sm:max-w-none">
-            Tu PDF no sale de tu computadora.
+            Herramientas PDF gratis en tu navegador.
           </h1>
           <p className="mt-5 text-[15px] leading-relaxed text-slate-600 max-w-[34ch]">
-            Edítalo, únelo, divídelo o comprímelo gratis y sin límites aquí mismo. Todo ocurre en la memoria de tu navegador, sin cuentas y sin subir nada.
+            Edita, une, divide y comprime PDFs sin límites y sin subir nada. Todo ocurre en la memoria de tu navegador: sin cuentas, sin servidores, 100% privado.
           </p>
 
           <div className="mt-auto pt-10">

@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { 
   RotateCw, 
   RotateCcw, 
@@ -717,6 +717,19 @@ export const OrganizeTool: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           onNavigate={(newIdx) => setPreviewPageIndex(newIdx)}
         />
       )}
+
+      {/* SEO Content Section */}
+      <section className="mt-16 pt-10 border-t border-slate-200">
+        <div className="prose prose-slate max-w-none text-sm text-slate-600">
+          <h3 className="text-lg font-bold text-slate-900 mb-3">Organizar páginas PDF de forma sencilla</h3>
+          <p>
+            ¿Necesitas cambiar el orden de las hojas, girar páginas escaneadas al revés o eliminar hojas en blanco? Nuestra herramienta para <strong>organizar páginas de PDF</strong> te ofrece un espacio de trabajo visual intuitivo. Simplemente arrastra y suelta las páginas, rotalas o bórralas en bloque usando nuestra selección múltiple avanzada.
+          </p>
+          <p className="mt-3">
+            Como siempre en PizzDF, <strong>todo sucede dentro de tu navegador web</strong>. A diferencia de otros editores en línea, nosotros no tenemos acceso a tus archivos en ningún momento, ofreciendo máxima privacidad y un rendimiento ultra-rápido incluso con documentos largos.
+          </p>
+        </div>
+      </section>
 
       <ToastNotification toasts={toasts} onDismiss={removeToast} />
 </div>

@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { 
   ArrowLeft, 
   Image as ImageIcon, 
@@ -206,6 +206,20 @@ export const PdfToImageTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
           </div>
         </div>
       )}
+
+      {/* SEO Content Section */}
+      <section className="mt-16 pt-10 border-t border-slate-200">
+        <div className="prose prose-slate max-w-none text-sm text-slate-600">
+          <h3 className="text-lg font-bold text-slate-900 mb-3">Convertir tu PDF a imágenes JPG o PNG</h3>
+          <p>
+            En muchas ocasiones (como compartir una página en redes sociales, subirla a una plataforma que solo acepta fotos, o insertarla en una presentación) necesitas extraer hojas de tu documento. Nuestra herramienta para <strong>convertir PDF a imagen</strong> genera archivos en formato PNG y JPG con alta resolución, preservando la calidad gráfica del archivo original. Puedes descargar una sola página o guardarlas todas simultáneamente en un archivo ZIP.
+          </p>
+          <p className="mt-3">
+            Garantizamos tu privacidad mediante procesamiento estrictamente local. <strong>PizzDF renderiza el PDF a imágenes en tu dispositivo</strong>; el archivo jamás será transferido ni almacenado en la nube.
+          </p>
+        </div>
+      </section>
+
       <ToastNotification toasts={toasts} onDismiss={removeToast} />
 </div>
   );

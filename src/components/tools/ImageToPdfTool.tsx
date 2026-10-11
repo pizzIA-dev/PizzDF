@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { 
   ArrowLeft, 
   FileSpreadsheet, 
@@ -251,6 +251,20 @@ export const ImageToPdfTool: React.FC<{ onBack: () => void }> = ({ onBack }) => 
           </div>
         </div>
       )}
+
+      {/* SEO Content Section */}
+      <section className="mt-16 pt-10 border-t border-slate-200">
+        <div className="prose prose-slate max-w-none text-sm text-slate-600">
+          <h3 className="text-lg font-bold text-slate-900 mb-3">Convertir imágenes (JPG, PNG) a PDF online</h3>
+          <p>
+            Si tienes fotos de recibos, capturas de pantalla, o apuntes que necesitas agrupar y compartir fácilmente, <strong>convertir imágenes a PDF</strong> es la mejor solución. Con nuestra herramienta puedes seleccionar múltiples fotos y combinarlas en un solo documento organizado, simplemente arrastrándolas para acomodarlas en el orden perfecto.
+          </p>
+          <p className="mt-3">
+            Para la tranquilidad de tus archivos personales (como fotos de identificaciones o comprobantes), <strong>PizzDF crea tu documento PDF directamente en tu navegador</strong> sin subir ninguna de tus fotos a un servidor. Disfruta de un conversor ilimitado con privacidad absoluta garantizada.
+          </p>
+        </div>
+      </section>
+
       <ToastNotification toasts={toasts} onDismiss={removeToast} />
 </div>
   );
